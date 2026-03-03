@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,14 +7,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 2,
-      maxlength: 60
+      maxlength: 60,
     },
     lastName: {
       type: String,
       required: true,
       trim: true,
       minlength: 2,
-      maxlength: 60
+      maxlength: 60,
     },
     email: {
       type: String,
@@ -22,25 +22,25 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, 'Invalid email format']
+      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
     },
     phone: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      match: [/^\+?[1-9]\d{7,14}$/, 'Invalid phone format']
+      match: [/^\+?[1-9]\d{7,14}$/, "Invalid phone format"],
     },
     role: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Role',
+      ref: "Role",
       required: true,
-      index: true
-    }
+      index: true,
+    },
   },
   {
-    versionKey: false
-  }
+    versionKey: false,
+  },
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

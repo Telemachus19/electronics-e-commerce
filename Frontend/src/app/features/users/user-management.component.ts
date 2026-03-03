@@ -6,7 +6,7 @@ import { User } from '../../shared/models/user.model';
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserManagementComponent implements OnInit {
   private readonly usersService = inject(UsersService);
@@ -23,7 +23,7 @@ export class UserManagementComponent implements OnInit {
       error: () => {
         this.users.set([]);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 

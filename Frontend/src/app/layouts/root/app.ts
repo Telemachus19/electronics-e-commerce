@@ -5,6 +5,6 @@ import { UserManagementComponent } from '../../features/users/user-management.co
   selector: 'app-root',
   imports: [UserManagementComponent],
   template: '<app-user-management></app-user-management>',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {}

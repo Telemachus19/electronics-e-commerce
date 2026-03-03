@@ -1,6 +1,6 @@
-const app = require('./app');
-const env = require('./config/env');
-const { connectDatabase } = require('./config/database');
+const app = require("./app");
+const env = require("./config/env");
+const { connectDatabase } = require("./config/database");
 
 const startServer = async () => {
   try {
@@ -9,7 +9,7 @@ const startServer = async () => {
       console.log(`Backend server running on port ${env.port}`);
     });
   } catch (error) {
-    console.error('Failed to start backend server:', error.message);
+    console.error("Failed to start backend server:", error.message);
     process.exit(1);
   }
 };

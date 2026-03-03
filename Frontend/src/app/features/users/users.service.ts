@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiListResponse, User } from '../../shared/models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
   private readonly http = inject(HttpClient);

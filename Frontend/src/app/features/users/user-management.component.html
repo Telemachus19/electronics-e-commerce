@@ -34,7 +34,9 @@
                 <td class="muted">{{ user.email }}</td>
                 <td class="muted">{{ user.phone }}</td>
                 <td>
-                  <span class="role" [class]="'role ' + user.role.name.toLowerCase()">{{ user.role.name }}</span>
+                  <span class="role" [class]="'role ' + user.role.name.toLowerCase()">{{
+                    user.role.name
+                  }}</span>
                 </td>
               </tr>
             }
