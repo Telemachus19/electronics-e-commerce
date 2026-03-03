@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+.users-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f6f8fb;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #eceff3;
+  padding: 20px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #111827;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-top: 1px solid #edf0f5;
+  padding: 14px 12px;
+  text-align: left;
+}
+
+th {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+td {
+  color: #111827;
+  font-size: 14px;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-id {
+  margin: 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.muted {
+  color: #4b5563;
+}
+
+.role {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.role.admin {
+  color: #7c3aed;
+}
+
+.role.seller {
+  color: #2563eb;
+}
+
+.role.customer {
+  color: #374151;
+}
+
+.state-message {
+  margin: 24px 0;
+  color: #4b5563;
+}
+
+@media (max-width: 900px) {
+  .header-row {
+    margin-bottom: 12px;
+  }
+}

@@ -1,15 +1,30 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Monorepo dependencies
+**/node_modules/
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# Frontend build/cache artifacts
+Frontend/dist/
+Frontend/.angular/
+Frontend/.angular/cache/
+Frontend/.sass-cache/
+Frontend/coverage/
+Frontend/tmp/
+Frontend/out-tsc/
+Frontend/bazel-out/
+Frontend/.cache/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Backend artifacts
+Backend/coverage/
+Backend/tmp/
+Backend/logs/
+
+# Environment files
+Backend/.env
+Frontend/.env
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # IDEs and editors
 .idea/
@@ -19,6 +34,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+.history/
 
 # Visual Studio Code
 .vscode/*
@@ -27,16 +43,12 @@ yarn-error.log
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/mcp.json
-.history/*
 
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
+connect.lock
+libpeerconnection.log
 testem.log
-/typings
+typings/
 __screenshots__/
 
 # System files
