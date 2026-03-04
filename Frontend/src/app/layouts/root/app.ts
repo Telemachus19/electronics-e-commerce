@@ -4,7 +4,8 @@ import { UserManagementComponent } from '../../features/users/user-management.co
 @Component({
   selector: 'app-root',
   imports: [UserManagementComponent],
-  template: '<app-user-management></app-user-management>',
+  templateUrl: './app.html',
+  styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {}
