@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { UsersService } from './users.service';
 import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-user-management',
+  imports: [NgClass],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
