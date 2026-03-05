@@ -1,59 +1,84 @@
-# ElectronicsECommerce
+# 🛍️ Electronics E-Commerce (MEAN)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.5.
+Simple monorepo for an electronics e-commerce course project.
 
-## Development server
+## 🗂️ Repo Structure
 
-To start a local development server, run:
-
-```bash
-ng serve
+```text
+electronics-e-commerce/
+├─ Frontend/
+└─ Backend/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+Backend/
+├─ src/
+│  ├─ config/
+│  ├─ controllers/
+│  ├─ models/
+│  ├─ routers/
+│  ├─ scripts/
+│  └─ shared/
+└─ .env
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+```text
+Frontend/
+├─ src/
+│  └─ app/
+│     ├─ core/
+│     ├─ layouts/
+│     ├─ features/
+│     └─ shared/
+├─ public/
+└─ dist/
 ```
 
-## Building
+## ⚙️ Setup
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### 1) Backend
 
 ```bash
-ng test
+cd Backend
+npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### 2) Frontend
 
 ```bash
-ng e2e
+cd Frontend
+npm install
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## ▶️ Run
 
-## Additional Resources
+Start backend:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+cd Backend
+npm start
+```
+
+Start frontend in another terminal:
+
+```bash
+cd Frontend
+npm start
+```
+
+Open:
+
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:5000`
+
+## 🧪 Build Frontend
+
+```bash
+cd Frontend
+npm run build
+```
+
+## 🛠️ Notes
+
+- Run commands inside `Frontend/` or `Backend/` (not repo root).
+- MongoDB data will be in the DB name set by `DB_NAME`.
