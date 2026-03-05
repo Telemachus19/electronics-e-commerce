@@ -12,7 +12,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:4200")
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin ?? '')) {
+    if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
     return callback(new Error("Not allowed by CORS"));
