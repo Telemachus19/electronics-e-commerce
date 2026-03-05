@@ -28,6 +28,11 @@ const createUser = async (req, res) => {
           });
       }
       roleId = customerRole._id;
+    } else {
+      const roleExists = await Role.exists({ _id: roleId });
+      if (!roleExists) {
+        return res.status(400).json({ message: "Invalid role specified" });
+      }
     }
 
     const user = await User.create({

@@ -7,7 +7,7 @@ import { ApiListResponse, User } from '../../shared/models/user.model';
 })
 export class UsersService {
   private readonly http = inject(HttpClient);
-  private readonly usersApiUrl = 'http://localhost:5000/api/users';
+  private readonly usersApiUrl = '/api/users';
 
   getUsers() {
     return this.http.get<ApiListResponse<User>>(this.usersApiUrl);

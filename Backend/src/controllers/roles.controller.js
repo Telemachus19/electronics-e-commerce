@@ -11,7 +11,10 @@ const listRoles = async (req, res) => {
 
 const createRole = async (req, res) => {
   try {
-    const role = await Role.create(req.body);
+    const { name, description } = req.body;
+    const roleData = { name, description };
+
+    const role = await Role.create(roleData);
     return res.status(201).json({ data: role });
   } catch (error) {
     if (error.code === 11000) {
