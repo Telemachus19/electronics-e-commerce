@@ -1,0 +1,75 @@
+<section class="product-detail-page">
+  <div class="back-link">
+    <a routerLink="/products">&larr; Back to Products</a>
+  </div>
+
+  @if (isLoading()) {
+    <p class="state-message">Loading product...</p>
+  } @else if (error()) {
+    <p class="state-message error">{{ error() }}</p>
+  } @else if (product()) {
+    <div class="product-container">
+      <div class="product-main">
+        <div class="product-info">
+          <h1>{{ product()!.name }}</h1>
+          <p class="description">{{ product()!.description }}</p>
+
+          <div class="product-details">
+            <div class="detail-row">
+              <span class="label">Price:</span>
+              <span class="value price">${{ product()!.price }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Stock:</span>
+              <span class="value" [ngClass]="{ 'low-stock': product()!.stock < 5 }">
+                {{ product()!.stock }} units
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Category:</span>
+              <span class="value category">{{ product()!.category }}</span>
+            </div>
+          </div>
+
+          @if (product() && (product()!.ratingCount ?? 0) > 0) {
+            <div class="rating-summary">
+              <span class="average">{{ product()!.ratingAverage }}/5</span>
+              <span class="count">Based on {{ product()!.ratingCount }} reviews</span>
+            </div>
+          } @else {
+            <p class="no-reviews">No reviews yet</p>
+          }
+        </div>
+      </div>
+
+      <div class="reviews-section">
+        <h2>Customer Reviews</h2>
+
+        @if (reviews().length === 0) {
+          <p class="state-message">No reviews yet. Be the first to review!</p>
+        } @else {
+          <div class="reviews-list">
+            @for (review of reviews(); track review._id) {
+              <div class="review-card">
+                <div class="review-header">
+                  <div class="reviewer-info">
+                    <span class="reviewer-name">
+                      {{ review.user.firstName }} {{ review.user.lastName }}
+                    </span>
+                    <span class="review-date">
+                      {{ review.createdAt | date: 'short' }}
+                    </span>
+                  </div>
+                  <span class="rating-badge">{{ review.rating }}/5</span>
+                </div>
+                @if (review.comment) {
+                  <p class="review-comment">{{ review.comment }}</p>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>

@@ -1,0 +1,39 @@
+<section class="products-page" aria-labelledby="products-title">
+  <div class="card">
+    <header class="header-row">
+      <h1 id="products-title">Products</h1>
+    </header>
+
+    @if (isLoading()) {
+      <p class="state-message">Loading products...</p>
+    } @else if (products().length === 0) {
+      <p class="state-message">No products found.</p>
+    } @else {
+      <div class="products-grid">
+        @for (product of products(); track product._id) {
+          <a [routerLink]="['/products', product._id]" class="product-card-link">
+            <div class="product-card">
+              <div class="product-header">
+                <h2>{{ product.name }}</h2>
+                <span class="price">${{ product.price }}</span>
+              </div>
+              <p class="description">{{ product.description }}</p>
+              <div class="product-meta">
+                <span class="category">{{ product.category }}</span>
+                <span class="stock" [ngClass]="{ 'low-stock': product.stock < 5 }">
+                  Stock: {{ product.stock }}
+                </span>
+              </div>
+              @if (product.ratingCount && product.ratingCount > 0) {
+                <div class="rating">
+                  <span class="average">{{ product.ratingAverage }}/5</span>
+                  <span class="count">({{ product.ratingCount }} reviews)</span>
+                </div>
+              }
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>

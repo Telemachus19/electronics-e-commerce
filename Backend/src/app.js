@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const rolesRouter = require("./routers/roles.router");
 const usersRouter = require("./routers/users.router");
+const productsRouter = require("./routers/products.router");
+const reviewsRouter = require("./routers/reviews.router");
 
 const app = express();
 
@@ -28,5 +30,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/roles", rolesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/products/:productId/reviews", reviewsRouter);
 
 module.exports = app;
