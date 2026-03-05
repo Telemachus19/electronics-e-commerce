@@ -1,0 +1,48 @@
+<section class="users-page" aria-labelledby="user-management-title">
+  <div class="card">
+    <header class="header-row">
+      <h1 id="user-management-title">User Management</h1>
+    </header>
+
+    @if (isLoading()) {
+      <p class="state-message">Loading users...</p>
+    } @else if (users().length === 0) {
+      <p class="state-message">No users found.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user._id; let index = $index) {
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">{{ initials(user) }}</div>
+                    <div>
+                      <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
+                      <p class="user-id">ID: #{{ userCode(index) }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="muted">{{ user.email }}</td>
+                <td class="muted">{{ user.phone }}</td>
+                <td>
+                  <span [ngClass]="['role', user.role.name.toLowerCase()]">{{
+                    user.role.name
+                  }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>
