@@ -1,10 +1,11 @@
 const path = require("path");
 const dotenv = require("dotenv");
 
-const envPath = process.env.ENV_PATH || path.resolve(__dirname, "..", ".env");
+const envPath =
+  process.env.ENV_PATH || path.resolve(__dirname, "../..", ".env");
 dotenv.config({ path: envPath });
 
-const requiredVars = ['MONGO_URI'];
+const requiredVars = ["MONGO_URI"];
 
 requiredVars.forEach((variable) => {
   if (!process.env[variable]) {
