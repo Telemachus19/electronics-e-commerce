@@ -1,1 +1,13 @@
-<app-user-management></app-user-management>
+<nav class="navbar">
+  <div class="nav-container">
+    <h1 class="brand">Electronics E-Commerce</h1>
+    <ul class="nav-links">
+      <li><a routerLink="/users" routerLinkActive="active">Users</a></li>
+      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
