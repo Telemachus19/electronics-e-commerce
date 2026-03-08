@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const Role = require("../models/role.model");
+const bcrypt = require("bcryptjs");
 
 const listUsers = async (req, res) => {
   try {
@@ -15,7 +16,7 @@ const listUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, role } = req.body;
+    const { firstName, lastName, email, phone, password, role } = req.body;
 
     let roleId = role;
     if (!roleId) {
@@ -35,11 +36,15 @@ const createUser = async (req, res) => {
       }
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password || "DefaultPass123!", salt);
+
     const user = await User.create({
       firstName,
       lastName,
       email,
       phone,
+      password: hashedPassword,
       role: roleId,
     });
 
@@ -61,7 +66,71 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id)
+      .select("firstName lastName email phone role")
+      .populate("role", "name");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to fetch user" });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, phone, role } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { firstName, lastName, email, phone, role },
+      { new: true, runValidators: true }
+    )
+      .select("firstName lastName email phone role")
+      .populate("role", "name");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: "Email or phone already exists" });
+    }
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({ message: "Failed to update user" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to delete user" });
+  }
+};
+
 module.exports = {
   listUsers,
   createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
 };

@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\+?[1-9]\d{7,14}$/, "Invalid phone format"],
     },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
