@@ -1,10 +1,69 @@
 <nav class="navbar">
   <div class="nav-container">
-    <h1 class="brand">Electronics E-Commerce</h1>
-    <ul class="nav-links">
-      <li><a routerLink="/users" routerLinkActive="active">Users</a></li>
-      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+    <a class="brand" routerLink="/">TechMart</a>
+
+    <ul class="nav-links" aria-label="Primary">
+      <li><a routerLink="/products" routerLinkActive="active">Categories</a></li>
+      <li><a routerLink="/products" routerLinkActive="active">Deals</a></li>
+      <li><a routerLink="/products" routerLinkActive="active">New Arrivals</a></li>
+      <li><a routerLink="/users" routerLinkActive="active">Support</a></li>
     </ul>
+
+    <label class="search-wrap" for="search-input">
+      <span class="search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path
+            d="M20 20l-3.5-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </span>
+      <input id="search-input" type="search" placeholder="Search products..." />
+    </label>
+
+    <div class="nav-actions" aria-label="Quick actions">
+      <button type="button" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <path
+            d="M12 20s-7-4.3-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.7-7 10-7 10z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+        </svg>
+      </button>
+      <button type="button" aria-label="Cart" class="with-badge">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+          <circle cx="17" cy="20" r="1.5" fill="currentColor" />
+          <path
+            d="M3 4h2l2.4 10h10.4l2-7H7.1"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="badge-count" aria-label="3 items">3</span>
+      </button>
+      <button type="button" aria-label="Account">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+          <path
+            d="M5.5 19a6.5 6.5 0 0 1 13 0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 </nav>
 
