@@ -1,0 +1,10 @@
+{
+  "name": "electronics-e-commerce-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm --prefix Backend run dev\" \"npm --prefix Frontend start\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

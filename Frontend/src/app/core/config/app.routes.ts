@@ -4,7 +4,11 @@ import { ProductsComponent } from '../../features/products/products.component';
 import { ProductDetailComponent } from '../../features/products/product-detail.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'users', pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('../../features/landing/landing.component').then((m) => m.LandingComponent),
+  },
   { path: 'users', component: UserManagementComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailComponent },
