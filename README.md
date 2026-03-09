@@ -36,6 +36,16 @@ Frontend/
 
 ## ⚙️ Setup
 
+### 0) Install all workspaces (recommended)
+
+From repo root:
+
+```bash
+npm install
+```
+
+This installs root tooling (like `concurrently`).
+
 ### 1) Backend
 
 ```bash
@@ -51,6 +61,23 @@ npm install
 ```
 
 ## ▶️ Run
+
+### Option A: Run both from one terminal (recommended)
+
+From repo root:
+
+```bash
+npm run dev
+```
+
+This starts:
+
+- Backend: `npm --prefix Backend run dev`
+- Frontend: `npm --prefix Frontend start`
+
+If port `4200` is already in use, stop the existing Angular dev server first.
+
+### Option B: Run each app manually
 
 Start backend:
 
@@ -80,5 +107,5 @@ npm run build
 
 ## 🛠️ Notes
 
-- Run commands inside `Frontend/` or `Backend/` (not repo root).
+- You can now run from repo root using `npm run dev`.
 - MongoDB data will be in the DB name set by `DB_NAME`.
