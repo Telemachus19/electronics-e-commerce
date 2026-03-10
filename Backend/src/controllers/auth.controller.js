@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const Role = require("../models/role.model");
 const BlacklistedToken = require("../models/blacklisted-token.model");
+const { sendOtpEmail } = require("../middlewares/email.service");
 
 const generateToken = (user) => {
   const secret = process.env.JWT_SECRET || "secret_key_change_me";
@@ -33,6 +34,10 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
     const user = await User.create({
       firstName,
       lastName,
@@ -40,26 +45,64 @@ const register = async (req, res) => {
       phone,
       password: hashedPassword,
       role: customerRole._id,
-      isApproved: false,
+      isApproved: false, // Will be set to true upon email verification
+      isEmailVerified: false,
+      otp,
+      otpExpires,
     });
 
-    const token = generateToken(user);
+    // Send OTP Email
+    try {
+      await sendOtpEmail(email, otp);
+    } catch (emailError) {
+      console.error("Failed to send OTP email:", emailError);
+      // Note: In a production app, you might want to rollback user creation here
+    }
 
     return res.status(201).json({
-      message: "User registered successfully",
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: "customer",
-      },
+      message: "Registration successful. Please check your email for the OTP.",
     });
   } catch (error) {
     return res
       .status(500)
       .json({ message: "Registration failed", error: error.message });
+  }
+};
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ email }).select("+otp +otpExpires").populate("role");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(400).json({ message: "Email already verified" });
+    }
+
+    if (!user.otp || !user.otpExpires || user.otp !== otp || user.otpExpires < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // Verify and Auto-Approve
+    user.isEmailVerified = true;
+    user.isApproved = true; // Auto-approve customer after email verification
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      message: "Email verified successfully",
+      token,
+      user: { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role.name },
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Verification failed" });
   }
 };
 
@@ -74,6 +117,10 @@ const login = async (req, res) => {
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (!user.isEmailVerified) {
+      return res.status(403).json({ message: "Please verify your email first" });
     }
 
     if (user.isDeleted === true) {
@@ -125,4 +172,4 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout };
+module.exports = { register, login, logout, verifyEmail };
