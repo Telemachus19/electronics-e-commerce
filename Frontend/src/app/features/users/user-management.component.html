@@ -17,6 +17,8 @@
               <th>Email</th>
               <th>Phone</th>
               <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -34,9 +36,115 @@
                 <td class="muted">{{ user.email }}</td>
                 <td class="muted">{{ user.phone }}</td>
                 <td>
-                  <span [ngClass]="['role', user.role.name.toLowerCase()]">{{
-                    user.role.name
-                  }}</span>
+                  <div class="role-editor role-cell-content">
+                    @if (!isRoleEditorOpen(user._id)) {
+                      <div class="role-display-row">
+                        <span class="role role-{{ user.role.name.toLowerCase() }}">{{
+                          user.role.name
+                        }}</span>
+                        <button
+                          type="button"
+                          class="edit-role-icon"
+                          [disabled]="isActionInProgress(user._id)"
+                          aria-label="Edit role"
+                          (click)="openRoleEditor(user)"
+                        >
+                          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                            <path
+                              d="M4 20h4l10.2-10.2a1.8 1.8 0 0 0 0-2.6l-1.4-1.4a1.8 1.8 0 0 0-2.6 0L4 16v4z"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.8"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M13.3 6.7l4 4"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.8"
+                              stroke-linecap="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    } @else {
+                      <div class="role-edit-panel">
+                        <select
+                          class="role-select"
+                          [disabled]="isActionInProgress(user._id)"
+                          (input)="onRoleSelectionChange(user._id, $any($event.target).value)"
+                          (change)="onRoleSelectionChange(user._id, $any($event.target).value)"
+                        >
+                          @if (!selectedRoleId(user._id)) {
+                            <option value="" disabled selected>Select role</option>
+                          }
+                          @for (role of roles(); track role._id) {
+                            <option
+                              [value]="role._id"
+                              [selected]="selectedRoleId(user._id) === role._id"
+                            >
+                              {{ role.name }}
+                            </option>
+                          }
+                        </select>
+                        <div class="role-edit-actions">
+                          <button
+                            type="button"
+                            class="action action-role"
+                            [disabled]="isActionInProgress(user._id) || !canUpdateRole(user)"
+                            (click)="updateRole(user)"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            class="action action-cancel"
+                            [disabled]="isActionInProgress(user._id)"
+                            (click)="closeRoleEditor(user._id)"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge {{ statusClass(user) }}">
+                    {{ statusLabel(user) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    @if (user.isApproved === false) {
+                      <button
+                        type="button"
+                        class="action action-approve"
+                        [disabled]="isActionInProgress(user._id)"
+                        (click)="approveUser(user._id)"
+                      >
+                        Approve
+                      </button>
+                    }
+
+                    <button
+                      type="button"
+                      class="action action-restrict"
+                      [disabled]="isActionInProgress(user._id)"
+                      (click)="toggleRestriction(user)"
+                    >
+                      {{ user.isRestricted === true ? 'Unrestrict' : 'Restrict' }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="action action-delete"
+                      [disabled]="isActionInProgress(user._id)"
+                      (click)="softDeleteUser(user._id)"
+                    >
+                      Soft Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             }

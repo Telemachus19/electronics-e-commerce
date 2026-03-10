@@ -12,7 +12,7 @@
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1700px;
   margin: 0 auto;
   padding: 0 1rem;
   display: flex;
@@ -121,6 +121,48 @@
 
 .nav-actions button:hover {
   color: #2f6fd2;
+}
+
+.auth-link {
+  text-decoration: none;
+  color: #334155;
+  font-size: 0.84rem;
+  font-weight: 600;
+  border: 1px solid #d5dbe5;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.auth-link.register {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+.auth-link.active-auth-link {
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+
+.role-chip {
+  text-transform: capitalize;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  background: #e0ecff;
+  color: #1d4ed8;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+.logout-btn {
+  width: auto !important;
+  height: auto !important;
+  border-radius: 999px !important;
+  border: 1px solid #f3d2d2 !important;
+  background: #fff5f5 !important;
+  color: #b91c1c !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 10px !important;
 }
 
 .with-badge {

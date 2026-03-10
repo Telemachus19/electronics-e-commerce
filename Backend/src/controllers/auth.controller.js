@@ -6,11 +6,9 @@ const BlacklistedToken = require("../models/blacklisted-token.model");
 
 const generateToken = (user) => {
   const secret = process.env.JWT_SECRET || "secret_key_change_me";
-  return jwt.sign(
-    { id: user._id, role: user.role.name },
-    secret,
-    { expiresIn: "1d" }
-  );
+  return jwt.sign({ id: user._id, role: user.role.name }, secret, {
+    expiresIn: "1d",
+  });
 };
 
 const register = async (req, res) => {
@@ -26,7 +24,9 @@ const register = async (req, res) => {
     // Assign default customer role
     const customerRole = await Role.findOne({ name: "customer" });
     if (!customerRole) {
-      return res.status(500).json({ message: "System error: Default role not found" });
+      return res
+        .status(500)
+        .json({ message: "System error: Default role not found" });
     }
 
     // Hash password
@@ -40,6 +40,7 @@ const register = async (req, res) => {
       phone,
       password: hashedPassword,
       role: customerRole._id,
+      isApproved: false,
     });
 
     const token = generateToken(user);
@@ -56,7 +57,9 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Registration failed", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Registration failed", error: error.message });
   }
 };
 
@@ -73,15 +76,34 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    if (user.isDeleted === true) {
+      return res.status(403).json({ message: "Account is deleted" });
+    }
+
+    if (user.isApproved === false) {
+      return res.status(403).json({ message: "Account pending approval" });
+    }
+
+    if (user.isRestricted === true) {
+      return res.status(403).json({ message: "Account is restricted" });
+    }
+
     const token = generateToken(user);
 
     return res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role.name },
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role.name,
+      },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Login failed", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Login failed", error: error.message });
   }
 };
 

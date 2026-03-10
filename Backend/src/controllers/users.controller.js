@@ -4,8 +4,12 @@ const bcrypt = require("bcryptjs");
 
 const listUsers = async (req, res) => {
   try {
-    const users = await User.find()
-      .select("firstName lastName email phone role")
+    const includeDeleted = req.query.includeDeleted === "true";
+
+    const users = await User.find(includeDeleted ? {} : { isDeleted: false })
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
       .populate("role", "name");
 
     return res.status(200).json({ data: users });
@@ -16,17 +20,16 @@ const listUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password, role } = req.body;
+    const { firstName, lastName, email, phone, password, role, isApproved } =
+      req.body;
 
     let roleId = role;
     if (!roleId) {
       const customerRole = await Role.findOne({ name: "customer" });
       if (!customerRole) {
-        return res
-          .status(400)
-          .json({
-            message: "Default customer role is missing. Run role seed first.",
-          });
+        return res.status(400).json({
+          message: "Default customer role is missing. Run role seed first.",
+        });
       }
       roleId = customerRole._id;
     } else {
@@ -37,7 +40,10 @@ const createUser = async (req, res) => {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password || "DefaultPass123!", salt);
+    const hashedPassword = await bcrypt.hash(
+      password || "DefaultPass123!",
+      salt,
+    );
 
     const user = await User.create({
       firstName,
@@ -46,10 +52,13 @@ const createUser = async (req, res) => {
       phone,
       password: hashedPassword,
       role: roleId,
+      isApproved: typeof isApproved === "boolean" ? isApproved : true,
     });
 
     const createdUser = await User.findById(user._id)
-      .select("firstName lastName email phone role")
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
       .populate("role", "name");
 
     return res.status(201).json({ data: createdUser });
@@ -70,10 +79,12 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id)
-      .select("firstName lastName email phone role")
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
       .populate("role", "name");
 
-    if (!user) {
+    if (!user || user.isDeleted) {
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -86,14 +97,58 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { firstName, lastName, email, phone, role } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      role,
+      isApproved,
+      isRestricted,
+    } = req.body;
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { firstName, lastName, email, phone, role },
-      { new: true, runValidators: true }
+    const updatePayload = {};
+
+    if (typeof firstName === "string") {
+      updatePayload.firstName = firstName;
+    }
+
+    if (typeof lastName === "string") {
+      updatePayload.lastName = lastName;
+    }
+
+    if (typeof email === "string") {
+      updatePayload.email = email;
+    }
+
+    if (typeof phone === "string") {
+      updatePayload.phone = phone;
+    }
+
+    if (role !== undefined) {
+      const roleExists = await Role.exists({ _id: role });
+      if (!roleExists) {
+        return res.status(400).json({ message: "Invalid role specified" });
+      }
+      updatePayload.role = role;
+    }
+
+    if (typeof isApproved === "boolean") {
+      updatePayload.isApproved = isApproved;
+    }
+
+    if (typeof isRestricted === "boolean") {
+      updatePayload.isRestricted = isRestricted;
+    }
+
+    const user = await User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      updatePayload,
+      { new: true, runValidators: true },
     )
-      .select("firstName lastName email phone role")
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
       .populate("role", "name");
 
     if (!user) {
@@ -115,15 +170,77 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      {
+        isDeleted: true,
+        deletedAt: new Date(),
+        isRestricted: true,
+      },
+      { new: true },
+    );
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json({ message: "User deleted successfully" });
+    return res.status(200).json({ message: "User soft deleted successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Failed to delete user" });
+  }
+};
+
+const approveUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { isApproved: true, isRestricted: false },
+      { new: true, runValidators: true },
+    )
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
+      .populate("role", "name");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to approve user" });
+  }
+};
+
+const setUserRestriction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isRestricted } = req.body;
+
+    if (typeof isRestricted !== "boolean") {
+      return res
+        .status(400)
+        .json({ message: "isRestricted must be a boolean" });
+    }
+
+    const user = await User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { isRestricted },
+      { new: true, runValidators: true },
+    )
+      .select(
+        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+      )
+      .populate("role", "name");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to update restriction" });
   }
 };
 
@@ -133,4 +250,6 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  approveUser,
+  setUserRestriction,
 };

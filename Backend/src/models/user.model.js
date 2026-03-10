@@ -42,9 +42,29 @@ const userSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    isApproved: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+    isRestricted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 

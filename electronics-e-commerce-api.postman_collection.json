@@ -1,0 +1,1184 @@
+{
+  "info": {
+    "_postman_id": "a2a83ba4-4128-4e6b-abdc-5337a4e86c84",
+    "name": "E-Commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33756568"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get users by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Users",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Karim\",\r\n  \"lastName\": \"Gad\",\r\n  \"email\": \"karimgad@example.com\",\r\n  \"phone\": \"+201234567890\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Users",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Kareem\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Users",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Include Deleted)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/users?includeDeleted=true",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "includeDeleted",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}/approve",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}",
+                "approve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restrict User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"isRestricted\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}/restriction",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}",
+                "restriction"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unrestrict User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"isRestricted\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/{{User ID}}/restriction",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "{{User ID}}",
+                "restriction"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Cancelling Headphones\",\r\n  \"description\": \"Premium over-ear headphones with active noise cancellation and 30-hour battery life.\",\r\n  \"price\": 299.99,\r\n  \"stock\": 50,\r\n  \"category\": \"audio\",\r\n  \"imageUrl\": \"https://placehold.co/600x400\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Products",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Enhancing Headphones\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Enhancing Headphones\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get All Reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Cancelling Headphones\",\r\n  \"description\": \"Premium over-ear headphones with active noise cancellation and 30-hour battery life.\",\r\n  \"price\": 299.99,\r\n  \"stock\": 50,\r\n  \"category\": \"audio\",\r\n  \"imageUrl\": \"https://placehold.co/600x400\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Review by ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Cancelling Headphones\",\r\n  \"description\": \"Premium over-ear headphones with active noise cancellation and 30-hour battery life.\",\r\n  \"price\": 299.99,\r\n  \"stock\": 50,\r\n  \"category\": \"audio\",\r\n  \"imageUrl\": \"https://placehold.co/600x400\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}",
+                "reviews",
+                "{{Review ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": \"69a766a52ed9fa2a29df7e64\",\r\n  \"rating\": 5,\r\n  \"comment\": \"Amazing sound quality and very comfortable to wear for long periods.\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"rating\": 4,\r\n  \"comment\": \"Amazing sound quality and very comfortable to wear for long periods.\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}",
+                "reviews",
+                "{{Review ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Wireless Noise Enhancing Headphones\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "{{Product ID}}",
+                "reviews",
+                "{{Review ID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Roles",
+      "item": [
+        {
+          "name": "Get All Roles",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/roles",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Roles by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/roles/{{Role ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "roles",
+                "{{Role ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"support\",\r\n  \"description\": \"Customer support representative with read-only access to orders\",\r\n  \"permissions\": [\r\n    \"users:read\",\r\n    \"orders:read\",\r\n    \"products:read\",\r\n    \"reviews:read\",\r\n    \"reviews:delete\"\r\n  ]\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/roles",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"permissions\": [\r\n    \"users:read\",\r\n    \"orders:read\",\r\n    \"products:read\",\r\n    \"reviews:read\",\r\n    \"reviews:delete\"\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/roles/{{Role ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "roles",
+                "{{Role ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/roles/{{Role ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "roles",
+                "{{Role ID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request GET '{{baseUrl}}/api/orders' --header 'Authorization: Bearer {{token}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/orders/{{Order ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders",
+                "{{Order ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"shippingAddress\":\"123 real street\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders/{{Order ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders",
+                "{{Order ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Order",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/orders/{{Order ID}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders",
+                "{{Order ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"shippingAddress\":\"123 fake street\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/orders' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{\"shippingAddress\":\"{{shippingAddress}}\"}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Carts",
+      "item": [
+        {
+          "name": "Get My Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/cart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"productId\":\"69a9c22ad4d4efb1900141b2\",\r\n\t\"quantity\":1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/cart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "cart"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/cart' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{\"productId\":\"{{productId}}\",\"quantity\":1}'"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/cart/{{productId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "cart",
+                "{{productId}}"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request DELETE '{{baseUrl}}/api/cart/{{productId}}' --header 'Authorization: Bearer {{token}}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Sign in",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "",
+                  "let json;",
+                  "try {",
+                  "  json = pm.response.json();",
+                  "} catch (e) {",
+                  "  json = {};",
+                  "}",
+                  "",
+                  "const token = json?.token || json?.access_token || json?.data?.token || json?.data?.access_token;",
+                  "",
+                  "pm.test('Token exists in response', function () {",
+                  "  pm.expect(token, 'token in response').to.be.ok;",
+                  "});",
+                  "",
+                  "if (token) {",
+                  "  pm.collectionVariables.set('token', token);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\t\r\n\t\"firstName\": \"karim\",\r\n\t\"lastName\": \"gad\",\r\n\t\"email\": \"karimgad@example.com\",\r\n\t\"phone\": \"+201157281010\",\r\n\t\"password\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "",
+                  "let json;",
+                  "try {",
+                  "  json = pm.response.json();",
+                  "} catch (e) {",
+                  "  json = {};",
+                  "}",
+                  "",
+                  "// Robust token extraction: supports {token}, {data:{token}}, {data:{access_token}}, {access_token}",
+                  "const token = json?.token || json?.access_token || json?.data?.token || json?.data?.access_token;",
+                  "",
+                  "pm.test('Token exists in response', function () {",
+                  "  pm.expect(token, 'token in response').to.be.ok;",
+                  "});",
+                  "",
+                  "if (token) {",
+                  "  pm.collectionVariables.set('token', token);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t//log in with either\r\n\t//\"identifier\":\"+201157281010\",\r\n\t\"identifier\": \"karimgad@example.com\",\r\n\t\"password\":\"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/auth/login' --header 'Content-Type: application/json' --data-raw '{\"identifier\":\"{{identifier}}\",\"password\":\"{{password}}\"}'"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": false
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/auth/logout' --header 'Authorization: Bearer {{token}}'"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "noauth"
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

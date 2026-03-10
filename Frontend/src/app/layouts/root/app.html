@@ -3,10 +3,15 @@
     <a class="brand" routerLink="/">TechMart</a>
 
     <ul class="nav-links" aria-label="Primary">
-      <li><a routerLink="/products" routerLinkActive="active">Categories</a></li>
-      <li><a routerLink="/products" routerLinkActive="active">Deals</a></li>
-      <li><a routerLink="/products" routerLinkActive="active">New Arrivals</a></li>
-      <li><a routerLink="/users" routerLinkActive="active">Support</a></li>
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Home
+        </a>
+      </li>
+      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+      @if (isAuthenticated() && role() === 'admin') {
+        <li><a routerLink="/users" routerLinkActive="active">User Management</a></li>
+      }
     </ul>
 
     <label class="search-wrap" for="search-input">
@@ -26,16 +31,6 @@
     </label>
 
     <div class="nav-actions" aria-label="Quick actions">
-      <button type="button" aria-label="Wishlist">
-        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-          <path
-            d="M12 20s-7-4.3-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.7-7 10-7 10z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-          />
-        </svg>
-      </button>
       <button type="button" aria-label="Cart" class="with-badge">
         <svg viewBox="0 0 24 24" role="presentation" focusable="false">
           <circle cx="9" cy="20" r="1.5" fill="currentColor" />
@@ -51,18 +46,17 @@
         </svg>
         <span class="badge-count" aria-label="3 items">3</span>
       </button>
-      <button type="button" aria-label="Account">
-        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-          <circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8" />
-          <path
-            d="M5.5 19a6.5 6.5 0 0 1 13 0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-          />
-        </svg>
-      </button>
+      @if (!isAuthenticated()) {
+        <a class="auth-link" routerLink="/login" routerLinkActive="active-auth-link">Login</a>
+        <a class="auth-link register" routerLink="/register" routerLinkActive="active-auth-link">
+          Sign Up
+        </a>
+      } @else {
+        <span class="role-chip">{{ role() }}</span>
+        <button type="button" aria-label="Logout" class="logout-btn" (click)="logout()">
+          Logout
+        </button>
+      }
     </div>
   </div>
 </nav>
