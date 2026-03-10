@@ -1,10 +1,63 @@
 <nav class="navbar">
   <div class="nav-container">
-    <h1 class="brand">Electronics E-Commerce</h1>
-    <ul class="nav-links">
-      <li><a routerLink="/users" routerLinkActive="active">Users</a></li>
+    <a class="brand" routerLink="/">TechMart</a>
+
+    <ul class="nav-links" aria-label="Primary">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Home
+        </a>
+      </li>
       <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+      @if (isAuthenticated() && role() === 'admin') {
+        <li><a routerLink="/users" routerLinkActive="active">User Management</a></li>
+      }
     </ul>
+
+    <label class="search-wrap" for="search-input">
+      <span class="search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path
+            d="M20 20l-3.5-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </span>
+      <input id="search-input" type="search" placeholder="Search products..." />
+    </label>
+
+    <div class="nav-actions" aria-label="Quick actions">
+      <button type="button" aria-label="Cart" class="with-badge">
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+          <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+          <circle cx="17" cy="20" r="1.5" fill="currentColor" />
+          <path
+            d="M3 4h2l2.4 10h10.4l2-7H7.1"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="badge-count" aria-label="3 items">3</span>
+      </button>
+      @if (!isAuthenticated()) {
+        <a class="auth-link" routerLink="/login" routerLinkActive="active-auth-link">Login</a>
+        <a class="auth-link register" routerLink="/register" routerLinkActive="active-auth-link">
+          Sign Up
+        </a>
+      } @else {
+        <span class="role-chip">{{ role() }}</span>
+        <button type="button" aria-label="Logout" class="logout-btn" (click)="logout()">
+          Logout
+        </button>
+      }
+    </div>
   </div>
 </nav>
 

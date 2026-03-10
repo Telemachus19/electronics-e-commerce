@@ -4,7 +4,7 @@ import { of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { UserManagementComponent } from './user-management.component';
 import { UsersService } from './users.service';
-import { User, ApiListResponse } from '../../shared/models/user.model';
+import { User, ApiListResponse, Role } from '../../shared/models/user.model';
 
 const mockUsers: User[] = [
   {
@@ -14,6 +14,10 @@ const mockUsers: User[] = [
     email: 'alice@example.com',
     phone: '555-0001',
     role: { _id: 'r1', name: 'admin' },
+    isApproved: true,
+    isRestricted: false,
+    isDeleted: false,
+    deletedAt: null,
   },
   {
     _id: '2',
@@ -22,20 +26,32 @@ const mockUsers: User[] = [
     email: 'bob@example.com',
     phone: '555-0002',
     role: { _id: 'r2', name: 'customer' },
+    isApproved: false,
+    isRestricted: false,
+    isDeleted: false,
+    deletedAt: null,
   },
+];
+
+const mockRoles: Role[] = [
+  { _id: 'r1', name: 'admin' },
+  { _id: 'r2', name: 'customer' },
 ];
 
 describe('UserManagementComponent', () => {
   const getUsersSpy = vi.fn();
+  const getRolesSpy = vi.fn();
 
   beforeEach(async () => {
     getUsersSpy.mockReset();
+    getRolesSpy.mockReset();
+    getRolesSpy.mockReturnValue(of({ data: mockRoles }));
 
     await TestBed.configureTestingModule({
       imports: [UserManagementComponent],
       providers: [
         provideHttpClient(),
-        { provide: UsersService, useValue: { getUsers: getUsersSpy } },
+        { provide: UsersService, useValue: { getUsers: getUsersSpy, getRoles: getRolesSpy } },
       ],
     }).compileComponents();
   });
@@ -113,4 +129,3 @@ describe('UserManagementComponent', () => {
     expect(ids[1].textContent).toContain('USR-002');
   });
 });
-

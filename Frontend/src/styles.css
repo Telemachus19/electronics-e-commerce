@@ -1,3 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f4;
+  color: #11141c;
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}

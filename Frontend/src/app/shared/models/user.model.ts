@@ -11,8 +11,16 @@ export interface User {
   email: string;
   phone: string;
   role: Role;
+  isApproved: boolean;
+  isRestricted: boolean;
+  isDeleted: boolean;
+  deletedAt: string | null;
 }
 
 export interface ApiListResponse<T> {
   data: T[];
+}
+
+export interface ApiItemResponse<T> {
+  data: T;
 }
