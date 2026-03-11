@@ -1,42 +1,51 @@
 <section class="landing-page" aria-label="Landing page">
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero" aria-labelledby="hero-title" (touchstart)="onHeroTouchStart($event)" (touchend)="onHeroTouchEnd($event)">
+    @if (activeHeroProduct(); as heroProduct) {
     <div class="hero-copy">
-      <p class="pill">New Release</p>
-      <h1 id="hero-title">Premium Wireless Headphones</h1>
-      <p>
-        Experience studio-quality sound with active noise cancellation and 40-hour battery life.
-      </p>
+      <p class="pill">{{ heroTag(heroProduct) }}</p>
+      <h1 id="hero-title">{{ heroProduct.name }}</h1>
+      <p>{{ heroDescription(heroProduct) }}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" routerLink="/products">Shop Now</a>
+        <a class="btn btn-primary" [routerLink]="['/products', productRouteId(heroProduct)]">Shop Now</a>
         <a class="btn btn-ghost" routerLink="/products">Learn More</a>
       </div>
     </div>
 
-    <div class="hero-visual" aria-hidden="true">
-      <svg viewBox="0 0 520 420" class="hero-headphones" role="presentation" focusable="false">
-        <defs>
-          <linearGradient id="cupShade" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#2c3443" />
-            <stop offset="100%" stop-color="#0e121a" />
-          </linearGradient>
-          <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#4a5366" />
-            <stop offset="100%" stop-color="#1b2330" />
-          </linearGradient>
-        </defs>
-        <path d="M144 216C144 116 213 58 286 58c74 0 143 58 143 158" fill="none" stroke="url(#rim)" stroke-width="22"
-          stroke-linecap="round" />
-        <ellipse cx="188" cy="258" rx="64" ry="76" fill="url(#cupShade)" />
-        <ellipse cx="188" cy="258" rx="52" ry="62" fill="#121923" />
-        <ellipse cx="374" cy="286" rx="74" ry="90" fill="url(#cupShade)" transform="rotate(18 374 286)" />
-        <ellipse cx="374" cy="286" rx="58" ry="72" fill="#121923" transform="rotate(18 374 286)" />
-      </svg>
+    <div class="hero-visual">
+      <div class="hero-image-frame">
+        <img class="hero-image" [src]="productImage(heroProduct)" [alt]="heroProduct.name" loading="eager" />
+
+        @if (heroProducts().length > 1) {
+        <div class="hero-arrows" aria-label="Hero carousel controls">
+          <button type="button" class="hero-arrow" (click)="previousHeroSlide()" aria-label="Previous slide">&#8249;</button>
+          <button type="button" class="hero-arrow" (click)="nextHeroSlide()" aria-label="Next slide">&#8250;</button>
+        </div>
+        }
+      </div>
     </div>
-    <div class="slider-dots" aria-hidden="true">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+
+    <div class="slider-dots" aria-label="Hero carousel navigation">
+      @for (item of heroProducts(); track item._id; let i = $index) {
+      <button type="button" class="dot" [class.active]="activeHeroIndex() === i" (click)="setHeroSlide(i)"
+        [attr.aria-label]="'Show slide ' + (i + 1)"></button>
+      }
     </div>
+    } @else {
+    <div class="hero-copy">
+      <p class="pill">New Release</p>
+      <h1 id="hero-title">Premium Wireless Headphones</h1>
+      <p>Experience studio-quality sound with active noise cancellation and 40-hour battery life.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" routerLink="/products">Shop Now</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-image-frame">
+        <img class="hero-image" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop"
+          alt="Featured product" loading="eager" />
+      </div>
+    </div>
+    }
   </section>
 
   <section class="block" aria-labelledby="categories-title">

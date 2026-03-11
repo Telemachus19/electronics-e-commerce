@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductsService, Product, ProductCategory } from '../products/products.service';
 
@@ -17,13 +25,84 @@ type CategoryCard = {
 })
 export class LandingComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
+  private readonly destroyRef = inject(DestroyRef);
+  private touchStartX: number | null = null;
 
+  protected readonly heroProducts = signal<Product[]>([]);
+  protected readonly activeHeroIndex = signal(0);
   protected readonly categories = signal<CategoryCard[]>([]);
   protected readonly trending = signal<Product[]>([]);
+  protected readonly activeHeroProduct = computed(() => {
+    const items = this.heroProducts();
+    if (items.length === 0) return null;
+    return items[this.activeHeroIndex()] || items[0] || null;
+  });
 
   ngOnInit(): void {
+    this.loadHeroProducts();
     this.loadCategories();
     this.loadTrendingProducts();
+  }
+
+  protected setHeroSlide(index: number): void {
+    const items = this.heroProducts();
+    if (items.length === 0) return;
+    const safeIndex = Math.max(0, Math.min(index, items.length - 1));
+    this.activeHeroIndex.set(safeIndex);
+  }
+
+  protected nextHeroSlide(): void {
+    const items = this.heroProducts();
+    if (items.length < 2) return;
+    this.activeHeroIndex.set((this.activeHeroIndex() + 1) % items.length);
+  }
+
+  protected previousHeroSlide(): void {
+    const items = this.heroProducts();
+    if (items.length < 2) return;
+    this.activeHeroIndex.set((this.activeHeroIndex() - 1 + items.length) % items.length);
+  }
+
+  protected onHeroTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0]?.clientX ?? null;
+  }
+
+  protected onHeroTouchEnd(event: TouchEvent): void {
+    const endX = event.changedTouches[0]?.clientX;
+    if (this.touchStartX == null || endX == null) return;
+
+    const deltaX = endX - this.touchStartX;
+    const swipeThreshold = 40;
+
+    if (Math.abs(deltaX) >= swipeThreshold) {
+      if (deltaX < 0) {
+        this.nextHeroSlide();
+      } else {
+        this.previousHeroSlide();
+      }
+    }
+
+    this.touchStartX = null;
+  }
+
+  protected heroDescription(product: Product): string {
+    if (!product.description) {
+      return 'Discover premium quality and unbeatable value on this featured product.';
+    }
+
+    const trimmed = product.description.trim();
+    if (trimmed.length <= 120) {
+      return trimmed;
+    }
+
+    return `${trimmed.slice(0, 117)}...`;
+  }
+
+  protected heroTag(product: Product): string {
+    if (product.compareAtPrice && product.compareAtPrice > product.price) {
+      return 'Limited Deal';
+    }
+    return 'New Release';
   }
 
   protected categoryIconKey(slug: string): string {
@@ -82,6 +161,32 @@ export class LandingComponent implements OnInit {
       error: () => {
         this.categories.set([]);
       },
+    });
+  }
+
+  private loadHeroProducts(): void {
+    this.productsService.getProducts({ limit: 5, sort: 'newest' }).subscribe({
+      next: (response) => {
+        this.heroProducts.set(response.data);
+        this.activeHeroIndex.set(0);
+        this.startHeroAutoplay();
+      },
+      error: () => {
+        this.heroProducts.set([]);
+      },
+    });
+  }
+
+  private startHeroAutoplay(): void {
+    const items = this.heroProducts();
+    if (items.length < 2) return;
+
+    const timer = setInterval(() => {
+      this.nextHeroSlide();
+    }, 5000);
+
+    this.destroyRef.onDestroy(() => {
+      clearInterval(timer);
     });
   }
 
