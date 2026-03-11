@@ -1,5 +1,6 @@
 <section class="landing-page" aria-label="Landing page">
-  <section class="hero" aria-labelledby="hero-title" (touchstart)="onHeroTouchStart($event)" (touchend)="onHeroTouchEnd($event)">
+  <section class="hero" aria-labelledby="hero-title" (touchstart)="onHeroTouchStart($event)"
+    (touchend)="onHeroTouchEnd($event)">
     @if (activeHeroProduct(); as heroProduct) {
     <div class="hero-copy">
       <p class="pill">{{ heroTag(heroProduct) }}</p>
@@ -17,7 +18,8 @@
 
         @if (heroProducts().length > 1) {
         <div class="hero-arrows" aria-label="Hero carousel controls">
-          <button type="button" class="hero-arrow" (click)="previousHeroSlide()" aria-label="Previous slide">&#8249;</button>
+          <button type="button" class="hero-arrow" (click)="previousHeroSlide()"
+            aria-label="Previous slide">&#8249;</button>
           <button type="button" class="hero-arrow" (click)="nextHeroSlide()" aria-label="Next slide">&#8250;</button>
         </div>
         }
@@ -41,7 +43,8 @@
     </div>
     <div class="hero-visual">
       <div class="hero-image-frame">
-        <img class="hero-image" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop"
+        <img class="hero-image"
+          src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop"
           alt="Featured product" loading="eager" />
       </div>
     </div>
