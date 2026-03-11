@@ -1,11 +1,13 @@
 const Order = require("../models/order.model");
 const Cart = require("../models/cart.model");
 const Product = require("../models/product.model");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createOrder = async (req, res) => {
   try {
-    const { shippingAddress } = req.body;
+    const { shippingAddress, paymentMethod } = req.body;
     const userId = req.user._id;
+    const method = paymentMethod === "card" ? "card" : "cod";
 
     // 1. Get Cart
     const cart = await Cart.findOne({ user: userId }).populate("items.product");
@@ -36,27 +38,59 @@ const createOrder = async (req, res) => {
       });
     }
 
-    // 3. Create Order
+    // 3. Handle Stripe Session (if Card)
+    let stripeSessionId = null;
+    let stripeUrl = null;
+
+    if (method === "card") {
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: cart.items.map((item) => ({
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.product.name,
+              images: item.product.imageUrl ? [item.product.imageUrl] : [],
+            },
+            unit_amount: Math.round(item.product.price * 100), // Stripe expects cents
+          },
+          quantity: item.quantity,
+        })),
+        mode: "payment",
+        success_url: `${process.env.FRONTEND_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/checkout/cancel`,
+        customer_email: req.user.email,
+      });
+
+      stripeSessionId = session.id;
+      stripeUrl = session.url;
+    }
+
+    // 4. Create Order
     const order = await Order.create({
       user: userId,
       items: orderItems,
       totalPrice,
       shippingAddress,
+      paymentMethod: method,
+      paymentStatus: method === "card" ? "pending" : "pending", // COD is also pending until delivered/paid
+      stripeSessionId,
     });
 
-    // 4. Update Stock
+    // 5. Update Stock
     for (const item of orderItems) {
       await Product.findByIdAndUpdate(item.product, {
         $inc: { stock: -item.quantity },
       });
     }
 
-    // 5. Clear Cart
+    // 6. Clear Cart
     cart.items = [];
     await cart.save();
 
-    return res.status(201).json({ data: order });
+    return res.status(201).json({ data: order, stripeUrl });
   } catch (error) {
+    console.error("Create order error:", error);
     return res.status(500).json({ message: "Failed to create order" });
   }
 };
@@ -72,10 +106,6 @@ const listOrders = async (req, res) => {
       // Customers see only their own orders
       query = { user: userId };
     }
-    // Note: Sellers might need more complex logic to see only orders containing their products
-    // For now, we'll treat sellers like admins or restrict them.
-    // Let's assume sellers see all orders for simplicity in this iteration,
-    // or you can restrict them to query = { user: userId } if they buy things too.
 
     const orders = await Order.find(query)
       .populate("user", "firstName lastName email")
@@ -192,10 +222,36 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const verifyStripePayment = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    
+    if (!sessionId) {
+      return res.status(400).json({ message: "Session ID is required" });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (session.payment_status === "paid") {
+      const order = await Order.findOneAndUpdate(
+        { stripeSessionId: sessionId },
+        { paymentStatus: "paid", status: "processing" },
+        { new: true }
+      );
+      return res.status(200).json({ message: "Payment verified", data: order });
+    }
+
+    return res.status(400).json({ message: "Payment not completed" });
+  } catch (error) {
+    return res.status(500).json({ message: "Verification failed" });
+  }
+};
+
 module.exports = {
   createOrder,
   listOrders,
   getOrderById,
   updateOrder,
   deleteOrder,
+  verifyStripePayment,
 };

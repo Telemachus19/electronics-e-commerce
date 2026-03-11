@@ -92,4 +92,56 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-module.exports = { getCart, addToCart, removeFromCart };
+const mergeCart = async (req, res) => {
+  try {
+    const { items } = req.body; // Expecting array: [{ productId: "...", quantity: 1 }]
+    const userId = req.user._id;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "No items to merge" });
+    }
+
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      // If user has no DB cart, create one with the guest items
+      const cartItems = items.map((item) => ({
+        product: item.productId,
+        quantity: item.quantity,
+      }));
+
+      cart = await Cart.create({
+        user: userId,
+        items: cartItems,
+      });
+    } else {
+      // If user already has a DB cart, merge items
+      for (const guestItem of items) {
+        const existingItem = cart.items.find(
+          (dbItem) => dbItem.product.toString() === guestItem.productId
+        );
+
+        if (existingItem) {
+          // Product exists? Add quantities
+          existingItem.quantity += guestItem.quantity;
+        } else {
+          // Product new? Push to array
+          cart.items.push({
+            product: guestItem.productId,
+            quantity: guestItem.quantity,
+          });
+        }
+      }
+      await cart.save();
+    }
+
+    // Return the updated, fully populated cart
+    await cart.populate("items.product");
+    return res.status(200).json({ data: cart });
+  } catch (error) {
+    console.error("Merge cart error:", error);
+    return res.status(500).json({ message: "Failed to merge cart" });
+  }
+};
+
+module.exports = { getCart, addToCart, removeFromCart, mergeCart };

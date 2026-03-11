@@ -117,6 +117,7 @@ npm run build
 - **Strategy**: JWT (JSON Web Tokens) with `bcryptjs` for password hashing.
 - **Login**: Supports **Email** OR **Phone** + Password.
 - **Frontend Auth Flow**: Added dedicated **Login** and **Register** pages.
+- **Email Verification**: Registration triggers a 6-digit OTP email (via Nodemailer). Users must verify (`/api/auth/verify-email`) before logging in.
 - **Token Handling**: Angular HTTP interceptor now automatically attaches `Authorization: Bearer <token>` to `/api/*` requests.
 - **Logout**: Implemented via **Token Blacklisting** (tokens are stored in MongoDB with a TTL index until expiry).
 - **Account Status Enforcement**: Login and authenticated requests now block users who are **deleted**, **restricted**, or **pending approval**.
@@ -141,6 +142,7 @@ npm run build
 ### 🛒 Shopping Cart & Checkout
 
 - **Cart**: Database-backed and persistent. Uses **Lazy Creation** (cart document is created only when the first item is added).
+- **Guest Strategy**: Backend supports `POST /api/cart/merge`. Frontend stores guest items in LocalStorage and merges them into the database upon login.
 - **Checkout Flow**:
   1. User fills Cart (`POST /api/cart`).
   2. User requests Checkout (`POST /api/orders`).
@@ -151,6 +153,9 @@ npm run build
 - **Permissions**:
   - **Users**: Can view their own orders. Can **delete (cancel)** an order only if status is `pending`.
   - **Admins/Sellers**: Can view all orders and update statuses (e.g., `shipped`).
+- **Payments**: Integrated **Stripe** for card payments.
+  - `createOrder` returns a Stripe Checkout URL if `paymentMethod: 'card'`.
+  - Added `POST /api/orders/verify-payment` to confirm payment status after redirect.
 
 ### ⭐ Reviews
 
