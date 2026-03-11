@@ -73,7 +73,9 @@ const verifyEmail = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    const user = await User.findOne({ email }).select("+otp +otpExpires").populate("role");
+    const user = await User.findOne({ email })
+      .select("+otp +otpExpires")
+      .populate("role");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -83,7 +85,12 @@ const verifyEmail = async (req, res) => {
       return res.status(400).json({ message: "Email already verified" });
     }
 
-    if (!user.otp || !user.otpExpires || user.otp !== otp || user.otpExpires < Date.now()) {
+    if (
+      !user.otp ||
+      !user.otpExpires ||
+      user.otp !== otp ||
+      user.otpExpires < Date.now()
+    ) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
@@ -99,7 +106,12 @@ const verifyEmail = async (req, res) => {
     return res.status(200).json({
       message: "Email verified successfully",
       token,
-      user: { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role.name },
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role.name,
+      },
     });
   } catch (error) {
     return res.status(500).json({ message: "Verification failed" });
@@ -119,8 +131,12 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    if (!user.isEmailVerified) {
-      return res.status(403).json({ message: "Please verify your email first" });
+    // Keep email verification mandatory for new users while allowing legacy users
+    // that may not have this field set in older records.
+    if (user.isEmailVerified === false) {
+      return res
+        .status(403)
+        .json({ message: "Please verify your email first" });
     }
 
     if (user.isDeleted === true) {

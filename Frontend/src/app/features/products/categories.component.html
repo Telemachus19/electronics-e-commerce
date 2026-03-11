@@ -1,0 +1,106 @@
+<section class="min-h-screen bg-slate-100 text-slate-900">
+  <div class="border-b border-slate-200 bg-white/95">
+    <div class="mx-auto flex max-w-[1200px] items-center gap-2 px-4 py-3 text-xs text-slate-500 sm:px-6 lg:px-8">
+      <a routerLink="/" class="transition hover:text-slate-700">Home</a>
+      <span>/</span>
+      <span class="font-semibold text-slate-800">Categories</span>
+    </div>
+  </div>
+
+  <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white">
+    <div class="absolute inset-0 opacity-30"
+      style="background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25), transparent 45%), radial-gradient(circle at 75% 70%, rgba(255,255,255,0.18), transparent 38%);">
+    </div>
+    <div class="relative mx-auto max-w-[1200px] px-4 py-14 text-center sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Explore Our Categories</h1>
+      <p class="mt-3 text-sm text-blue-100 sm:text-base">
+        Discover thousands of products across all categories
+      </p>
+      <div class="mx-auto mt-8 max-w-xl">
+        <label class="relative block" for="category-search">
+          <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-4.35-4.35m1.6-5.15a6.75 6.75 0 11-13.5 0 6.75 6.75 0 0113.5 0z" />
+          </svg>
+          <input id="category-search" type="text" [value]="searchQuery()" (input)="onSearchChange($event)"
+            placeholder="Search categories..."
+            class="w-full rounded-xl border border-white/60 bg-white py-3 pl-12 pr-4 text-sm text-slate-900 shadow-lg outline-none transition focus:border-blue-200 focus:ring-2 focus:ring-blue-200" />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-[1200px] px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mb-5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 text-sm text-slate-700">
+        <span class="font-semibold">Sort by:</span>
+        <select [value]="sortBy()" (change)="setSortBy($any($event.target).value)"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+          <option value="popularity">Popularity</option>
+          <option value="name">Name</option>
+          <option value="products">Product Count</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-1 rounded-lg border border-slate-300 bg-white p-1">
+        <button type="button" (click)="setViewMode('grid')" class="rounded-md p-2 transition hover:bg-slate-100"
+          [class.bg-blue-600]="viewMode() === 'grid'" [class.text-white]="viewMode() === 'grid'"
+          [class.text-slate-600]="viewMode() !== 'grid'" aria-label="Grid view">
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zM3 11h6v6H3v-6zm8 0h6v6h-6v-6z" />
+          </svg>
+        </button>
+        <button type="button" (click)="setViewMode('list')" class="rounded-md p-2 transition hover:bg-slate-100"
+          [class.bg-blue-600]="viewMode() === 'list'" [class.text-white]="viewMode() === 'list'"
+          [class.text-slate-600]="viewMode() !== 'list'" aria-label="List view">
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 4h12v2H4V4zm0 5h12v2H4V9zm0 5h12v2H4v-2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+      <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <p class="mt-4 text-sm text-slate-600">Loading categories...</p>
+    </div>
+    } @else if (sortedCategories().length === 0) {
+    <div class="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+      <p class="text-sm text-slate-600">No categories found matching your search.</p>
+    </div>
+    } @else {
+    <div class="mb-14 grid gap-4" [class.grid-cols-1]="viewMode() === 'list'"
+      [class.sm:grid-cols-2]="viewMode() === 'grid'" [class.lg:grid-cols-4]="viewMode() === 'grid'">
+      @for (category of sortedCategories(); track category.id) {
+      <a [routerLink]="['/products']" [queryParams]="{ category: category.id }"
+        class="category-card group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        [class.flex]="viewMode() === 'list'">
+        <div class="relative overflow-hidden" [class.aspect-[4/3]]="viewMode() === 'grid'"
+          [class.h-44]="viewMode() === 'list'" [class.w-44]="viewMode() === 'list'" [style.background]="category.color">
+          <img [src]="category.image" [alt]="category.name" loading="lazy"
+            class="h-full w-full object-cover opacity-55 transition duration-500 group-hover:scale-105" />
+          <div
+            class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-xs font-bold text-slate-700 shadow">
+            {{ categoryInitial(category.name) }}
+          </div>
+        </div>
+
+        <div class="flex flex-1 flex-col gap-2 p-4">
+          <h2 class="text-lg font-semibold text-slate-900 transition group-hover:text-blue-700">
+            {{ category.name }}
+          </h2>
+          <p class="text-xs text-slate-500">{{ category.description }}</p>
+          <div class="mt-auto flex items-end justify-between pt-2">
+            <p class="text-2xl font-bold leading-none text-blue-700">{{ category.productCount | number }}</p>
+            <p class="text-xs text-slate-500">products</p>
+          </div>
+        </div>
+      </a>
+      }
+    </div>
+    }
+
+  </div>
+</section>

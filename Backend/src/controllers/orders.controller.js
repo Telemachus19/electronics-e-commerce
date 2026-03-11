@@ -1,7 +1,8 @@
 const Order = require("../models/order.model");
 const Cart = require("../models/cart.model");
 const Product = require("../models/product.model");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecretKey ? require("stripe")(stripeSecretKey) : null;
 
 const createOrder = async (req, res) => {
   try {
@@ -43,6 +44,12 @@ const createOrder = async (req, res) => {
     let stripeUrl = null;
 
     if (method === "card") {
+      if (!stripe) {
+        return res
+          .status(503)
+          .json({ message: "Card payments are not configured on this server" });
+      }
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: cart.items.map((item) => ({
@@ -224,8 +231,16 @@ const deleteOrder = async (req, res) => {
 
 const verifyStripePayment = async (req, res) => {
   try {
+    if (!stripe) {
+      return res
+        .status(503)
+        .json({
+          message: "Stripe verification is not configured on this server",
+        });
+    }
+
     const { sessionId } = req.body;
-    
+
     if (!sessionId) {
       return res.status(400).json({ message: "Session ID is required" });
     }
@@ -236,7 +251,7 @@ const verifyStripePayment = async (req, res) => {
       const order = await Order.findOneAndUpdate(
         { stripeSessionId: sessionId },
         { paymentStatus: "paid", status: "processing" },
-        { new: true }
+        { new: true },
       );
       return res.status(200).json({ message: "Payment verified", data: order });
     }

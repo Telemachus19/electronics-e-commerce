@@ -1,39 +1,172 @@
-<section class="products-page" aria-labelledby="products-title">
-  <div class="card">
-    <header class="header-row">
-      <h1 id="products-title">Products</h1>
-    </header>
+<section class="min-h-screen bg-slate-100 py-6" aria-labelledby="products-title">
+  <div class="mx-auto max-w-[1220px] px-4 sm:px-6 lg:px-8">
+    <div class="mb-5 flex items-center gap-2 text-xs text-slate-500">
+      <a routerLink="/" class="transition hover:text-slate-700">Home</a>
+      <span>/</span>
+      <span class="font-semibold text-slate-800">Products</span>
+    </div>
 
-    @if (isLoading()) {
-      <p class="state-message">Loading products...</p>
-    } @else if (products().length === 0) {
-      <p class="state-message">No products found.</p>
-    } @else {
-      <div class="products-grid">
-        @for (product of products(); track product._id) {
-          <a [routerLink]="['/products', product._id]" class="product-card-link">
-            <div class="product-card">
-              <div class="product-header">
-                <h2>{{ product.name }}</h2>
-                <span class="price">${{ product.price }}</span>
+    <div class="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <aside class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-slate-900">Filters</h2>
+          <button type="button" (click)="clearCategory()"
+            class="text-xs font-semibold text-blue-600 hover:text-blue-700">
+            Clear All
+          </button>
+        </div>
+
+        <div class="border-b border-slate-200 pb-6">
+          <h3 class="text-sm font-semibold text-slate-800">Categories</h3>
+          <ul class="mt-4 space-y-3">
+            @for (category of categoryCounts(); track category.name) {
+            <li>
+              <button type="button" (click)="setSelectedCategory(category.name)"
+                class="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-sm transition"
+                [class.border-blue-600]="selectedCategory() === category.name"
+                [class.bg-blue-50]="selectedCategory() === category.name"
+                [class.text-blue-700]="selectedCategory() === category.name"
+                [class.border-slate-200]="selectedCategory() !== category.name"
+                [class.text-slate-600]="selectedCategory() !== category.name">
+                <span>{{ category.displayName }}</span>
+                <span class="text-xs">({{ category.count }})</span>
+              </button>
+            </li>
+            }
+          </ul>
+        </div>
+
+        <div class="border-b border-slate-200 py-6">
+          <h3 class="text-sm font-semibold text-slate-800">Price Range</h3>
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1">
+              <span class="text-xs text-slate-500">Min</span>
+              <input type="number" min="0" placeholder="0" [value]="minPrice() ?? ''"
+                (input)="setMinPrice($any($event.target).value)"
+                class="rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+            </label>
+            <label class="flex flex-col gap-1">
+              <span class="text-xs text-slate-500">Max</span>
+              <input type="number" min="0" placeholder="500" [value]="maxPrice() ?? ''"
+                (input)="setMaxPrice($any($event.target).value)"
+                class="rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+            </label>
+          </div>
+          <div class="mt-3 text-xs text-slate-500">
+            Active range: ${{ minPrice() ?? 0 }} - ${{ maxPrice() ?? 'Any' }}
+          </div>
+        </div>
+
+        <div class="pt-6">
+          <h3 class="text-sm font-semibold text-slate-800">Rating</h3>
+          <div class="mt-4 space-y-3 text-sm text-slate-600">
+            <label class="flex items-center gap-2"><input type="checkbox" class="h-4 w-4 rounded border-slate-300"
+                [checked]="minRating() === 5" (change)="setMinRating(5, $any($event.target).checked)" /><span>5 stars
+                &amp; up</span></label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="h-4 w-4 rounded border-slate-300"
+                [checked]="minRating() === 4" (change)="setMinRating(4, $any($event.target).checked)" /><span>4 stars
+                &amp; up</span></label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="h-4 w-4 rounded border-slate-300"
+                [checked]="minRating() === 3" (change)="setMinRating(3, $any($event.target).checked)" /><span>3 stars
+                &amp; up</span></label>
+          </div>
+        </div>
+      </aside>
+
+      <main class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 id="products-title" class="text-4xl font-bold tracking-tight text-slate-900">All Products</h1>
+            <p class="mt-2 text-sm text-slate-500">Showing {{ productRangeLabel() }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <select [value]="sortBy()" (change)="setSortBy($any($event.target).value)"
+              class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              aria-label="Sort products">
+              <option value="featured">Sort by: Featured</option>
+              <option value="priceAsc">Price: Low to High</option>
+              <option value="priceDesc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+            </select>
+
+            <button type="button" (click)="setViewMode('grid')" class="rounded-lg border p-2 transition"
+              [class.border-blue-600]="viewMode() === 'grid'" [class.bg-blue-600]="viewMode() === 'grid'"
+              [class.text-white]="viewMode() === 'grid'" [class.border-slate-300]="viewMode() !== 'grid'"
+              [class.text-slate-600]="viewMode() !== 'grid'" aria-label="Grid view">
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zM3 11h6v6H3v-6zm8 0h6v6h-6v-6z" />
+              </svg>
+            </button>
+            <button type="button" (click)="setViewMode('compact')" class="rounded-lg border p-2 transition"
+              [class.border-blue-600]="viewMode() === 'compact'" [class.bg-blue-600]="viewMode() === 'compact'"
+              [class.text-white]="viewMode() === 'compact'" [class.border-slate-300]="viewMode() !== 'compact'"
+              [class.text-slate-600]="viewMode() !== 'compact'" aria-label="Compact view">
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M4 4h12v2H4V4zm0 5h12v2H4V9zm0 5h12v2H4v-2z" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        @if (isLoading()) {
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-12 text-center">
+          <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+          <p class="mt-4 text-sm text-slate-600">Loading products...</p>
+        </div>
+        } @else if (products().length === 0) {
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-12 text-center">
+          <p class="text-sm text-slate-600">No products found for this filter.</p>
+        </div>
+        } @else {
+        <div class="grid gap-4" [class.sm:grid-cols-2]="viewMode() === 'grid'"
+          [class.xl:grid-cols-3]="viewMode() === 'grid'" [class.grid-cols-1]="viewMode() === 'compact'">
+          @for (product of products(); track product._id) {
+          <article
+            class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <a [routerLink]="['/products', product.slug || product._id]" class="block">
+              <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                <img [src]="productImage(product)" [alt]="product.name" loading="lazy"
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                @if (product.ratingAverage && product.ratingAverage >= 4.5) {
+                <span
+                  class="absolute left-3 top-3 rounded-full bg-emerald-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">Top
+                  Rated</span>
+                }
               </div>
-              <p class="description">{{ product.description }}</p>
-              <div class="product-meta">
-                <span class="category">{{ product.category }}</span>
-                <span class="stock" [ngClass]="{ 'low-stock': product.stock < 5 }">
-                  Stock: {{ product.stock }}
-                </span>
+            </a>
+
+            <div class="space-y-3 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold text-blue-700">{{ displayCategoryName(product.category || 'other') }}
+                </p>
+                <p class="text-xs text-amber-500">
+                  ★ {{ product.ratingAverage || 0 }} <span class="text-slate-400">({{ product.ratingCount || 0
+                    }})</span>
+                </p>
               </div>
-              @if (product.ratingCount && product.ratingCount > 0) {
-                <div class="rating">
-                  <span class="average">{{ product.ratingAverage }}/5</span>
-                  <span class="count">({{ product.ratingCount }} reviews)</span>
+
+              <a [routerLink]="['/products', product.slug || product._id]"
+                class="line-clamp-2 text-lg font-semibold text-slate-900 transition hover:text-blue-700">{{ product.name
+                }}</a>
+              <p class="line-clamp-2 text-sm text-slate-500">{{ product.description }}</p>
+
+              <div class="flex items-end justify-between">
+                <div>
+                  <p class="text-2xl font-bold text-slate-900">${{ product.price | number: '1.2-2' }}</p>
+                  <p class="text-xs" [class.text-red-600]="product.stock < 5"
+                    [class.text-emerald-600]="product.stock >= 5">
+                    {{ product.stock < 5 ? 'Low stock' : 'In stock' }} ({{ product.stock }}) </p>
                 </div>
-              }
+                <a [routerLink]="['/products', product.slug || product._id]"
+                  class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">View</a>
+              </div>
             </div>
-          </a>
+          </article>
+          }
+        </div>
         }
-      </div>
-    }
+      </main>
+    </div>
   </div>
 </section>

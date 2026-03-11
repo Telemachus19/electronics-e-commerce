@@ -199,14 +199,20 @@ body {
   color: #145dc2;
 }
 
-.product-image {
+.product-image-wrap {
   grid-row: 2;
   height: 170px;
   border-radius: 14px;
   margin: 0;
-  background:
-    radial-gradient(circle at 70% 28%, rgba(255, 255, 255, 0.65) 0%, transparent 42%),
-    linear-gradient(145deg, #eef2f8 0%, #cbd6ea 100%);
+  overflow: hidden;
+  background: #dfe4ec;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .product-info {
@@ -272,30 +278,6 @@ body {
 .product-card:nth-child(4) .badge {
   background-color: #1d7cff;
   color: #ffffff;
-}
-
-.product-card:nth-child(1) .product-image {
-  background:
-    radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.75) 0%, transparent 42%),
-    linear-gradient(180deg, #f7f8fa 0%, #dde1e8 100%);
-}
-
-.product-card:nth-child(2) .product-image {
-  background:
-    radial-gradient(circle at 68% 35%, rgba(255, 255, 255, 0.55) 0%, transparent 44%),
-    linear-gradient(180deg, #f5f7fb 0%, #ced6e7 100%);
-}
-
-.product-card:nth-child(3) .product-image {
-  background:
-    radial-gradient(circle at 48% 26%, rgba(255, 255, 255, 0.6) 0%, transparent 38%),
-    linear-gradient(180deg, #e6ecf7 0%, #bcc8dd 100%);
-}
-
-.product-card:nth-child(4) .product-image {
-  background:
-    radial-gradient(circle at 70% 22%, rgba(0, 184, 255, 0.34) 0%, transparent 42%),
-    linear-gradient(150deg, #091326 0%, #273761 48%, #3f2f72 100%);
 }
 
 .promo {
