@@ -8,7 +8,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { combineLatest, debounceTime, switchMap } from 'rxjs';
@@ -38,6 +38,7 @@ const SORT_API_MAP: Record<SortOption, ProductListParams['sort']> = {
 })
 export class ProductsComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
+  private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
 
@@ -48,6 +49,7 @@ export class ProductsComponent implements OnInit {
   protected readonly selectedCategory = signal('');
   protected readonly sortBy = signal<SortOption>('featured');
   protected readonly viewMode = signal<'grid' | 'compact'>('grid');
+  protected readonly searchQuery = signal('');
   protected readonly minPrice = signal<number | null>(null);
   protected readonly maxPrice = signal<number | null>(null);
   protected readonly minRating = signal<number | null>(null);
@@ -66,6 +68,13 @@ export class ProductsComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const q = params.get('q')?.trim() || '';
+      const category = params.get('category')?.trim().toLowerCase() || '';
+      this.searchQuery.set(q);
+      this.selectedCategory.set(category);
+    });
+
     this.productsService.getCategories().subscribe({
       next: (res) => this.allCategories.set(res.data),
       error: () => {
@@ -75,6 +84,7 @@ export class ProductsComponent implements OnInit {
 
     combineLatest([
       toObservable(this.selectedCategory, { injector: this.injector }),
+      toObservable(this.searchQuery, { injector: this.injector }),
       toObservable(this.sortBy, { injector: this.injector }),
       toObservable(this.minPrice, { injector: this.injector }),
       toObservable(this.maxPrice, { injector: this.injector }),
@@ -82,7 +92,7 @@ export class ProductsComponent implements OnInit {
     ])
       .pipe(
         debounceTime(50),
-        switchMap(([category, sort, minPrice, maxPrice, minRating]) => {
+        switchMap(([category, query, sort, minPrice, maxPrice, minRating]) => {
           this.isLoading.set(true);
           const params: ProductListParams = {
             sort: SORT_API_MAP[sort],
@@ -96,6 +106,7 @@ export class ProductsComponent implements OnInit {
           }
 
           if (category) params.category = category;
+          if (query) params.q = query;
           if (safeMin != null) params.minPrice = safeMin;
           if (safeMax != null) params.maxPrice = safeMax;
           if (minRating != null) params.minRating = minRating;

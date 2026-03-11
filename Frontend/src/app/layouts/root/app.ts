@@ -27,6 +27,7 @@ export class App {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly cartItemCount = signal(0);
+  protected readonly searchTerm = signal('');
 
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly role = computed(() => this.authService.role() ?? 'guest');
@@ -46,10 +47,25 @@ export class App {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
+        const queryValue = this.router.parseUrl(this.router.url).queryParams['q'];
+        this.searchTerm.set(typeof queryValue === 'string' ? queryValue : '');
+
         if (this.isAuthenticated()) {
           this.refreshCartCount();
         }
       });
+  }
+
+  protected onSearchInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
+
+  protected onSearchSubmit(): void {
+    const query = this.searchTerm().trim();
+    void this.router.navigate(['/products'], {
+      queryParams: query ? { q: query } : {},
+    });
   }
 
   protected logout(): void {

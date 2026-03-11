@@ -22,7 +22,8 @@
           <path d="M20 20l-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
       </span>
-      <input id="search-input" type="search" placeholder="Search products..." />
+      <input id="search-input" type="search" placeholder="Search products..." [value]="searchTerm()"
+        (input)="onSearchInput($event)" (keydown.enter)="onSearchSubmit()" />
     </label>
 
     <div class="nav-actions" aria-label="Quick actions">
