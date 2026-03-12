@@ -1,123 +1,121 @@
 <section class="min-h-screen bg-[#f5f7fb] py-6 sm:py-8" aria-labelledby="cart-title">
-    <div class="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        <div class="mb-5 flex items-center gap-2 text-xs text-slate-500">
-            <a routerLink="/" class="transition hover:text-slate-700">Home</a>
-            <span>/</span>
-            <a routerLink="/products" class="transition hover:text-slate-700">Products</a>
-            <span>/</span>
-            <span class="font-semibold text-slate-900">Cart</span>
-        </div>
+  <div class="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
+    <div class="mb-5 flex items-center gap-2 text-xs text-slate-500">
+      <a routerLink="/" class="transition hover:text-slate-700">Home</a>
+      <span>/</span>
+      <a routerLink="/products" class="transition hover:text-slate-700">Products</a>
+      <span>/</span>
+      <span class="font-semibold text-slate-900">Cart</span>
+    </div>
 
-        <header class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <h1 id="cart-title" class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Your Cart</h1>
-            <p class="text-sm text-slate-500">{{ totalItems() }} {{ totalItems() === 1 ? 'item' : 'items' }}</p>
-        </header>
+    <header class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <h1 id="cart-title" class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Your Cart</h1>
+      <p class="text-sm text-slate-500">{{ totalItems() }} {{ totalItems() === 1 ? 'item' : 'items' }}</p>
+    </header>
 
-        @if (state() === 'loading') {
-        <div class="rounded-3xl border border-slate-200 bg-white p-14 text-center shadow-sm">
-            <div class="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
-            <p class="mt-4 text-sm text-slate-600">Loading cart...</p>
-        </div>
-        } @else if (state() === 'error') {
-        <div class="rounded-3xl border border-red-200 bg-red-50 p-10 text-center shadow-sm">
-            <p class="text-sm font-medium text-red-700">{{ error() || 'Unable to load your cart.' }}</p>
-            <a routerLink="/products"
-                class="mt-4 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Continue
-                shopping</a>
+    @if (state() === 'loading') {
+    <div class="rounded-3xl border border-slate-200 bg-white p-14 text-center shadow-sm">
+      <div class="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <p class="mt-4 text-sm text-slate-600">Loading cart...</p>
+    </div>
+    } @else if (state() === 'error') {
+    <div class="rounded-3xl border border-red-200 bg-red-50 p-10 text-center shadow-sm">
+      <p class="text-sm font-medium text-red-700">{{ error() || 'Unable to load your cart.' }}</p>
+      <a routerLink="/products"
+        class="mt-4 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Continue
+        shopping</a>
+    </div>
+    } @else {
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <section class="space-y-3">
+        @if (cartItems().length === 0) {
+        <div class="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <h2 class="text-xl font-semibold text-slate-900">Your cart is empty</h2>
+          <p class="mt-2 text-sm text-slate-600">Looks like you have not added any products yet.</p>
+          <a routerLink="/products"
+            class="mt-5 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Explore
+            products</a>
         </div>
         } @else {
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-            <section class="space-y-3">
-                @if (cartItems().length === 0) {
-                <div class="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-                    <h2 class="text-xl font-semibold text-slate-900">Your cart is empty</h2>
-                    <p class="mt-2 text-sm text-slate-600">Looks like you have not added any products yet.</p>
-                    <a routerLink="/products"
-                        class="mt-5 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Explore
-                        products</a>
+        @for (item of cartItems(); track item.product._id) {
+        <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <img
+              [src]="item.product.imageUrl || 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=320&auto=format&fit=crop'"
+              [alt]="item.product.name" class="h-28 w-full rounded-xl border border-slate-200 object-cover sm:w-36"
+              loading="lazy" />
+            <div class="flex-1 space-y-3">
+              <div class="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <h2 class="text-base font-semibold text-slate-900">{{ item.product.name }}</h2>
+                  <p class="mt-1 text-sm text-slate-500">Unit price: ${{ item.product.price | number:
+                    '1.2-2' }}</p>
                 </div>
-                } @else {
-                @for (item of cartItems(); track item.product._id) {
-                <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
-                        <img [src]="item.product.imageUrl || 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=320&auto=format&fit=crop'"
-                            [alt]="item.product.name"
-                            class="h-28 w-full rounded-xl border border-slate-200 object-cover sm:w-36"
-                            loading="lazy" />
-                        <div class="flex-1 space-y-3">
-                            <div class="flex flex-wrap items-start justify-between gap-2">
-                                <div>
-                                    <h2 class="text-base font-semibold text-slate-900">{{ item.product.name }}</h2>
-                                    <p class="mt-1 text-sm text-slate-500">Unit price: ${{ item.product.price | number:
-                                        '1.2-2' }}</p>
-                                </div>
-                                <p class="text-xl font-bold text-slate-900">${{ item.product.price * item.quantity |
-                                    number: '1.2-2' }}</p>
-                            </div>
-                            <div class="flex flex-wrap items-center justify-between gap-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm text-slate-500">Qty:</span>
-                                    <span
-                                        class="rounded-lg bg-slate-100 px-2.5 py-1 text-sm font-semibold text-slate-800">{{
-                                        item.quantity }}</span>
-                                    <button type="button" (click)="addOneMore(item.product._id)"
-                                        class="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">+1</button>
-                                </div>
-                                <button type="button" (click)="removeItem(item.product._id)"
-                                    [disabled]="removingProductId() === item.product._id"
-                                    class="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60">{{
-                                    removingProductId() === item.product._id ? 'Removing...' : 'Remove' }}</button>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                }
-                }
-            </section>
-
-            <aside class="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <h2 class="text-lg font-semibold text-slate-900">Order Summary</h2>
-                <dl class="mt-4 space-y-3 text-sm">
-                    <div class="flex items-center justify-between text-slate-600">
-                        <dt>Subtotal</dt>
-                        <dd>${{ subtotal() | number: '1.2-2' }}</dd>
-                    </div>
-                    <div class="flex items-center justify-between text-slate-600">
-                        <dt>Estimated tax</dt>
-                        <dd>${{ estimatedTax() | number: '1.2-2' }}</dd>
-                    </div>
-                    <div class="flex items-center justify-between text-slate-600">
-                        <dt>Shipping</dt>
-                        <dd>
-                            @if (estimatedShipping() === 0) {
-                            <span class="font-semibold text-emerald-600">Free</span>
-                            } @else {
-                            <span>${{ estimatedShipping() | number: '1.2-2' }}</span>
-                            }
-                        </dd>
-                    </div>
-                </dl>
-
-                <div class="mt-4 border-t border-slate-200 pt-4">
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-semibold text-slate-900">Total</p>
-                        <p class="text-2xl font-extrabold text-slate-900">${{ orderTotal() | number: '1.2-2' }}</p>
-                    </div>
+                <p class="text-xl font-bold text-slate-900">${{ item.product.price * item.quantity |
+                  number: '1.2-2' }}</p>
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-slate-500">Qty:</span>
+                  <span class="rounded-lg bg-slate-100 px-2.5 py-1 text-sm font-semibold text-slate-800">{{
+                    item.quantity }}</span>
+                  <button type="button" (click)="addOneMore(item.product._id)"
+                    class="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">+1</button>
                 </div>
-
-                <button type="button" [disabled]="cartItems().length === 0"
-                    routerLink="/checkout"
-                    class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400">Proceed
-                    to Checkout</button>
-                <a routerLink="/products"
-                    class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Continue
-                    Shopping</a>
-
-                @if (error()) {
-                <p class="mt-3 text-xs font-medium text-red-600">{{ error() }}</p>
-                }
-            </aside>
-        </div>
+                <button type="button" (click)="removeItem(item.product._id)"
+                  [disabled]="removingProductId() === item.product._id"
+                  class="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60">{{
+                  removingProductId() === item.product._id ? 'Removing...' : 'Remove' }}</button>
+              </div>
+            </div>
+          </div>
+        </article>
         }
+        }
+      </section>
+
+      <aside class="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <h2 class="text-lg font-semibold text-slate-900">Order Summary</h2>
+        <dl class="mt-4 space-y-3 text-sm">
+          <div class="flex items-center justify-between text-slate-600">
+            <dt>Subtotal</dt>
+            <dd>${{ subtotal() | number: '1.2-2' }}</dd>
+          </div>
+          <div class="flex items-center justify-between text-slate-600">
+            <dt>Estimated tax</dt>
+            <dd>${{ estimatedTax() | number: '1.2-2' }}</dd>
+          </div>
+          <div class="flex items-center justify-between text-slate-600">
+            <dt>Shipping</dt>
+            <dd>
+              @if (estimatedShipping() === 0) {
+              <span class="font-semibold text-emerald-600">Free</span>
+              } @else {
+              <span>${{ estimatedShipping() | number: '1.2-2' }}</span>
+              }
+            </dd>
+          </div>
+        </dl>
+
+        <div class="mt-4 border-t border-slate-200 pt-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-semibold text-slate-900">Total</p>
+            <p class="text-2xl font-extrabold text-slate-900">${{ orderTotal() | number: '1.2-2' }}</p>
+          </div>
+        </div>
+
+        <button type="button" [disabled]="cartItems().length === 0" routerLink="/checkout"
+          class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400">Proceed
+          to Checkout</button>
+        <a routerLink="/products"
+          class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Continue
+          Shopping</a>
+
+        @if (error()) {
+        <p class="mt-3 text-xs font-medium text-red-600">{{ error() }}</p>
+        }
+      </aside>
     </div>
+    }
+  </div>
 </section>
