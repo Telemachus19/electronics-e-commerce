@@ -25,3 +25,15 @@ export const adminGuard: CanActivateFn = () => {
 
   return router.createUrlTree(['/products']);
 };
+
+export const sellerOrAdminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const role = authService.role();
+
+  if (role === 'admin' || role === 'seller') {
+    return true;
+  }
+
+  return router.createUrlTree(['/products']);
+};

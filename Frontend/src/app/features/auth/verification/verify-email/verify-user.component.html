@@ -1,0 +1,39 @@
+<section class="auth-page" aria-labelledby="verify-title">
+  <div class="auth-card">
+    <h1 id="verify-title">Verify Your Email</h1>
+    <p class="auth-subtitle">Step 1 of 2: enter your email and we will send a fresh verification code.</p>
+
+    @if (infoMessage()) {
+      <p class="info-message">{{ infoMessage() }}</p>
+    }
+
+    <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" novalidate>
+      <label class="field-label" for="email">Email</label>
+      <input
+        id="email"
+        class="field-input"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+      />
+
+      @if (emailForm.controls.email.touched && emailForm.controls.email.invalid) {
+        <p class="error-message" role="alert">Enter a valid email address.</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="error-message" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <button class="submit-button" type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Sending code...' : 'Send verification code' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Back to
+      <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</section>

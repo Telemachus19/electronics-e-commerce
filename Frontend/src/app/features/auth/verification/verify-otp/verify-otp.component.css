@@ -1,0 +1,179 @@
+:host {
+  display: block;
+}
+
+.auth-page {
+  min-height: calc(100vh - 70px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: min(100%, 470px);
+  background: #ffffff;
+  border: 1px solid #e6ebf2;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #0f172a;
+}
+
+.auth-subtitle {
+  margin: 8px 0 16px;
+  color: #475569;
+}
+
+.info-message {
+  margin: 0 0 12px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.success-message {
+  margin: 0 0 12px;
+  background: #ecfdf3;
+  color: #166534;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.email-pill {
+  margin: 0 0 18px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border: 1px solid #dbe5f1;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+}
+
+.field-label {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.otp-group {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.otp-input {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  border: 1px solid #d2dae5;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f8fbff;
+}
+
+.otp-input:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+
+.otp-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.resend-hint {
+  color: #475569;
+  font-size: 13px;
+}
+
+.resend-button {
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 700;
+  padding: 0;
+  cursor: pointer;
+}
+
+.resend-button:disabled {
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.submit-button {
+  margin-top: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.auth-footer {
+  margin: 16px 0 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.auth-footer a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  .auth-card {
+    padding: 20px;
+  }
+
+  .otp-group {
+    gap: 8px;
+  }
+
+  .otp-input {
+    font-size: 22px;
+    border-radius: 12px;
+  }
+}

@@ -11,7 +11,8 @@ import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } fro
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../core/auth/auth.service';
-import { CartService } from '../../features/products/cart.service';
+import { CartService } from '../../features/products/cart/cart.service';
+import { WishlistService } from '../../features/products/wishlist/wishlist.service';
 
 @Component({
   selector: 'app-root',
@@ -23,10 +24,12 @@ import { CartService } from '../../features/products/cart.service';
 export class App {
   private readonly authService = inject(AuthService);
   private readonly cartService = inject(CartService);
+  private readonly wishlistService = inject(WishlistService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly cartItemCount = this.cartService.cartItemCount;
+  protected readonly wishlistCount = this.wishlistService.wishlistCount;
   protected readonly searchTerm = signal('');
 
   protected readonly isAuthenticated = this.authService.isAuthenticated;

@@ -1,0 +1,84 @@
+<section class="auth-page" aria-labelledby="verify-otp-title">
+  <div class="auth-card otp-card">
+    <h1 id="verify-otp-title">Enter Verification Code</h1>
+    <p class="auth-subtitle">Step 2 of 2: verify the code sent to your inbox.</p>
+
+    @if (infoMessage()) {
+      <p class="info-message">{{ infoMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="success-message" role="status">{{ successMessage() }}</p>
+    }
+
+    @if (resendMessage()) {
+      <p class="info-message" role="status">{{ resendMessage() }}</p>
+    }
+
+    <p class="email-pill">Verifying {{ email() }}</p>
+
+    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" novalidate>
+      <label class="field-label" for="digit0">OTP Code</label>
+
+      <div class="otp-group" (paste)="onOtpPaste($event)">
+        @for (controlName of otpControlNames; track controlName; let index = $index) {
+          <input
+            #otpInput
+            [id]="controlName"
+            class="otp-input"
+            type="text"
+            [formControlName]="controlName"
+            [disabled]="isVerified()"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="1"
+            aria-label="OTP digit {{ index + 1 }}"
+            (input)="onDigitInput(controlName, index, $event)"
+            (keydown)="onDigitKeydown(index, $event)"
+          />
+        }
+      </div>
+
+      @if (otpForm.touched && otpForm.invalid) {
+        <p class="error-message" role="alert">Enter the full 6-digit code.</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="error-message" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <div class="resend-row">
+        <span class="resend-hint">
+          @if (canResend()) {
+            You can request a new code now.
+          } @else {
+            Resend available in {{ resendCountdownLabel() }}.
+          }
+        </span>
+
+        <button
+          type="button"
+          class="resend-button"
+          [disabled]="!canResend()"
+          (click)="resendVerificationEmail()"
+        >
+          {{ isResending() ? 'Sending...' : 'Resend code' }}
+        </button>
+      </div>
+
+      <button class="submit-button" type="submit" [disabled]="isSubmitting() || isVerified()">
+        {{ isSubmitting() ? 'Verifying...' : isVerified() ? 'Verified' : 'Verify account' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Wrong email?
+      <a [routerLink]="['/verify-user']" [queryParams]="{ email: email() }">Change it</a>
+    </p>
+
+    <p class="auth-footer">
+      Back to
+      <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</section>

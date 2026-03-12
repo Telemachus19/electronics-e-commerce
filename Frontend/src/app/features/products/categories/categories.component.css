@@ -1,0 +1,48 @@
+.category-card {
+  animation: card-fade-in 280ms ease;
+}
+
+.view-toggle-group {
+  border-color: #dbe3ef;
+}
+
+.view-toggle-btn {
+  border-color: transparent;
+  color: #475569;
+  background: transparent;
+  min-width: 36px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-toggle-btn:hover {
+  background: #eef2ff;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+.view-toggle-btn.is-active {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.view-toggle-btn.is-active:hover {
+  background: #1d4ed8;
+  border-color: #1e40af;
+  color: #ffffff;
+}
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

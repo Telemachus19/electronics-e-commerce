@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   listProducts,
+  listManagedProducts,
   listCategories,
   getProductById,
   createProduct,
@@ -15,6 +16,12 @@ const {
 const productsRouter = express.Router();
 
 productsRouter.get("/", listProducts);
+productsRouter.get(
+  "/manage",
+  authenticate,
+  authorizeRoles("admin", "seller"),
+  listManagedProducts,
+);
 productsRouter.get("/categories", listCategories);
 productsRouter.get("/:id", getProductById);
 productsRouter.post(

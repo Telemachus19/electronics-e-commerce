@@ -26,8 +26,9 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
+      sparse: true,
       trim: true,
       match: [/^\+?[1-9]\d{7,14}$/, "Invalid phone format"],
     },
@@ -42,11 +43,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    isApproved: {
-      type: Boolean,
-      default: true,
-      index: true,
-    },
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -56,6 +52,10 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
     otpExpires: {
+      type: Date,
+      select: false,
+    },
+    otpLastSentAt: {
       type: Date,
       select: false,
     },
