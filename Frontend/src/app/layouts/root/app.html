@@ -1,62 +1,62 @@
 <nav class="navbar">
   <div class="nav-container">
-    <a class="brand" routerLink="/">TechMart</a>
+    <a class="brand" routerLink="/" (click)="closeMenu()">TechMart</a>
 
-    <ul class="nav-links" aria-label="Primary">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          Home
+    <button type="button" class="hamburger" [class.is-open]="menuOpen()" (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-panel" [class.is-open]="menuOpen()">
+      <ul class="nav-links" aria-label="Primary">
+        <li>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+            Home
+          </a>
+        </li>
+        <li><a routerLink="/categories" routerLinkActive="active" (click)="closeMenu()">Categories</a></li>
+        <li><a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Products</a></li>
+        @if (isAuthenticated() && role() === 'admin') {
+        <li><a routerLink="/users" routerLinkActive="active" (click)="closeMenu()">User Management</a></li>
+        }
+      </ul>
+
+      <label class="search-wrap" for="search-input">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M20 20l-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <input id="search-input" type="search" placeholder="Search products..." [value]="searchTerm()"
+          (input)="onSearchInput($event)" (keydown.enter)="onSearchSubmit()" />
+      </label>
+
+      <div class="nav-actions" aria-label="Quick actions">
+        <a routerLink="/cart" routerLinkActive="active-action" aria-label="Cart" class="with-badge"
+          (click)="closeMenu()">
+          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+            <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+            <circle cx="17" cy="20" r="1.5" fill="currentColor" />
+            <path d="M3 4h2l2.4 10h10.4l2-7H7.1" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="badge-count" aria-label="Cart items">{{ cartItemCount() }}</span>
         </a>
-      </li>
-      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
-      @if (isAuthenticated() && role() === 'admin') {
-        <li><a routerLink="/users" routerLinkActive="active">User Management</a></li>
-      }
-    </ul>
-
-    <label class="search-wrap" for="search-input">
-      <span class="search-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-          <path
-            d="M20 20l-3.5-3.5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
-      </span>
-      <input id="search-input" type="search" placeholder="Search products..." />
-    </label>
-
-    <div class="nav-actions" aria-label="Quick actions">
-      <button type="button" aria-label="Cart" class="with-badge">
-        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-          <circle cx="9" cy="20" r="1.5" fill="currentColor" />
-          <circle cx="17" cy="20" r="1.5" fill="currentColor" />
-          <path
-            d="M3 4h2l2.4 10h10.4l2-7H7.1"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-        <span class="badge-count" aria-label="3 items">3</span>
-      </button>
-      @if (!isAuthenticated()) {
-        <a class="auth-link" routerLink="/login" routerLinkActive="active-auth-link">Login</a>
-        <a class="auth-link register" routerLink="/register" routerLinkActive="active-auth-link">
+        @if (!isAuthenticated()) {
+        <a class="auth-link" routerLink="/login" routerLinkActive="active-auth-link" (click)="closeMenu()">Login</a>
+        <a class="auth-link register" routerLink="/register" routerLinkActive="active-auth-link" (click)="closeMenu()">
           Sign Up
         </a>
-      } @else {
+        } @else {
         <span class="role-chip">{{ role() }}</span>
         <button type="button" aria-label="Logout" class="logout-btn" (click)="logout()">
           Logout
         </button>
-      }
+        }
+      </div>
     </div>
   </div>
 </nav>

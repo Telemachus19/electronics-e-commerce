@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "seed:roles": "node src/scripts/seed-roles.js"
+    "seed:roles": "node src/scripts/seed-roles.js",
+    "seed:catalog": "node src/scripts/seed-catalog.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
