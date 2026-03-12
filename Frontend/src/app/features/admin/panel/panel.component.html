@@ -1,0 +1,36 @@
+<section class="panel-page" aria-labelledby="panel-title">
+  <div class="panel-shell">
+    @if (isAdmin()) {
+      <div class="embedded-tabs" role="tablist" aria-label="Panel sections">
+        <button
+          type="button"
+          class="tab-link"
+          [class.tab-active]="activeTab() === 'products'"
+          (click)="setTab('products')"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'products'"
+        >
+          Product Management
+        </button>
+        <button
+          type="button"
+          class="tab-link"
+          [class.tab-active]="activeTab() === 'users'"
+          (click)="setTab('users')"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'users'"
+        >
+          User Management
+        </button>
+      </div>
+    }
+
+    <div class="panel-content">
+      @if (activeTab() === 'products') {
+        <app-product-management [embedded]="true"></app-product-management>
+      } @else if (isAdmin()) {
+        <app-user-management [embedded]="true"></app-user-management>
+      }
+    </div>
+  </div>
+</section>

@@ -12,6 +12,18 @@ const SORT_MAP = {
   featured: { createdAt: -1 },
 };
 
+const OWNER_POPULATE_FIELDS = "firstName lastName email";
+
+const isSellerUser = (user) => user?.role?.name === "seller";
+
+const isOwnedByUser = (product, userId) => {
+  if (!product?.owner || !userId) {
+    return false;
+  }
+
+  return String(product.owner) === String(userId);
+};
+
 const listProducts = async (req, res) => {
   try {
     const {
@@ -93,7 +105,11 @@ const listProducts = async (req, res) => {
     const sortQuery = SORT_MAP[sort] || SORT_MAP.newest;
 
     const [products, total] = await Promise.all([
-      Product.find(filter).sort(sortQuery).skip(skip).limit(limitNum),
+      Product.find(filter)
+        .populate("owner", OWNER_POPULATE_FIELDS)
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limitNum),
       Product.countDocuments(filter),
     ]);
 
@@ -158,6 +174,78 @@ const listCategories = async (req, res) => {
   }
 };
 
+const listManagedProducts = async (req, res) => {
+  try {
+    const {
+      category,
+      q,
+      minPrice,
+      maxPrice,
+      inStock,
+      sort = "newest",
+      page = 1,
+      limit = 20,
+    } = req.query;
+
+    const filter = { isActive: true };
+
+    if (isSellerUser(req.user)) {
+      filter.owner = req.user._id;
+    }
+
+    if (category) {
+      filter.category = String(category).toLowerCase();
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      filter.price = {};
+      if (minPrice !== undefined) filter.price.$gte = parseFloat(minPrice);
+      if (maxPrice !== undefined) filter.price.$lte = parseFloat(maxPrice);
+    }
+
+    if (inStock === "true") {
+      filter.stock = { $gt: 0 };
+    }
+
+    if (q) {
+      const term = String(q).trim();
+      filter.$or = [
+        { name: { $regex: term, $options: "i" } },
+        { description: { $regex: term, $options: "i" } },
+        { category: { $regex: term, $options: "i" } },
+      ];
+    }
+
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 20));
+    const skip = (pageNum - 1) * limitNum;
+    const sortQuery = SORT_MAP[sort] || SORT_MAP.newest;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .populate("owner", OWNER_POPULATE_FIELDS)
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limitNum),
+      Product.countDocuments(filter),
+    ]);
+
+    return res.status(200).json({
+      data: products,
+      meta: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch managed products" });
+  }
+};
+
 const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -172,7 +260,7 @@ const getProductById = async (req, res) => {
     const product = await Product.findOne({
       isActive: true,
       $or: lookupClauses,
-    });
+    }).populate("owner", OWNER_POPULATE_FIELDS);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -221,7 +309,14 @@ const createProduct = async (req, res) => {
       images,
       tags,
       attributes,
+      owner,
     } = req.body;
+
+    const ownerId = isSellerUser(req.user)
+      ? req.user._id
+      : mongoose.isValidObjectId(owner)
+        ? owner
+        : undefined;
 
     const product = await Product.create({
       name,
@@ -238,9 +333,15 @@ const createProduct = async (req, res) => {
       images,
       tags,
       attributes,
+      owner: ownerId,
     });
 
-    return res.status(201).json({ data: product });
+    const createdProduct = await Product.findById(product._id).populate(
+      "owner",
+      OWNER_POPULATE_FIELDS,
+    );
+
+    return res.status(201).json({ data: createdProduct });
   } catch (error) {
     if (error.code === 11000) {
       return res
@@ -258,14 +359,26 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const existingProduct = await Product.findById(id);
 
-    if (!product) {
+    if (!existingProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    if (
+      isSellerUser(req.user) &&
+      !isOwnedByUser(existingProduct, req.user._id)
+    ) {
+      return res
+        .status(403)
+        .json({ message: "You can only modify your own products" });
+    }
+
+    const { owner, ...updatePayload } = req.body;
+    const product = await Product.findByIdAndUpdate(id, updatePayload, {
+      new: true,
+      runValidators: true,
+    }).populate("owner", OWNER_POPULATE_FIELDS);
 
     return res.status(200).json({ data: product });
   } catch (error) {
@@ -279,11 +392,19 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findByIdAndDelete(id);
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    if (isSellerUser(req.user) && !isOwnedByUser(product, req.user._id)) {
+      return res
+        .status(403)
+        .json({ message: "You can only delete your own products" });
+    }
+
+    await Product.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
@@ -293,6 +414,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   listProducts,
+  listManagedProducts,
   listCategories,
   getProductById,
   createProduct,

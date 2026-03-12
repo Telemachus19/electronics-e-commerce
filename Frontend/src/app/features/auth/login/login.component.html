@@ -1,0 +1,50 @@
+<section class="auth-page" aria-labelledby="login-title">
+  <div class="auth-card">
+    <h1 id="login-title">Welcome Back</h1>
+    <p class="auth-subtitle">Sign in to access dashboard features.</p>
+
+    @if (infoMessage()) {
+      <p class="info-message">{{ infoMessage() }}</p>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <label class="field-label" for="identifier">Email Or Phone</label>
+      <input
+        id="identifier"
+        class="field-input"
+        type="text"
+        formControlName="identifier"
+        autocomplete="username"
+        placeholder="you@example.com or +201234567890"
+      />
+
+      <label class="field-label" for="password">Password</label>
+      <input
+        id="password"
+        class="field-input"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+      />
+
+      @if (errorMessage()) {
+        <p class="error-message" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <button class="submit-button" type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      No account?
+      <a routerLink="/register">Create one</a>
+    </p>
+
+    <p class="auth-footer">
+      Need to verify OTP?
+      <a routerLink="/verify-user">Verify account</a>
+    </p>
+  </div>
+</section>

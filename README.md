@@ -110,6 +110,33 @@ npm run build
 - You can now run from repo root using `npm run dev`.
 - MongoDB data will be in the DB name set by `DB_NAME`.
 
+## 🆕 New Features
+
+- **Seller/Admin Product Workspace**
+  - Added seller/admin dashboard routes: `/panel`, `/admin/products`, `/admin/products/new`, `/admin/products/:id/edit`.
+  - Sellers can only manage their own products; admins can manage the full catalog.
+
+- **Advanced Product Discovery**
+  - Products API now supports `q`, `category`, `minPrice`, `maxPrice`, `minRating`, `inStock`, `sort`, `page`, and `limit`.
+  - Frontend product listing includes search, category filtering, price range filtering, and rating filters.
+
+- **Wishlist (Frontend)**
+  - Added dedicated `/wishlist` page.
+  - Wishlist is persisted in LocalStorage (`electronics_wishlist`) with live header count updates.
+  - Product list and product details support save/remove from wishlist.
+
+- **Profile Self-Service**
+  - Added authenticated profile endpoints: `GET /api/auth/me` and `PUT /api/auth/me`.
+  - Frontend profile screen now supports viewing and editing account details.
+
+- **Verification UX Improvements**
+  - Added `POST /api/auth/resend-verification-email` with resend cooldown protection.
+  - Added frontend verification flow routes: `/verify-user` and `/verify-user/otp`.
+
+- **Category Enhancements**
+  - Public categories endpoint returns active categories with live product counts.
+  - Admin category management supports create/update/delete by slug.
+
 ## 📚 Feature Documentation
 
 ### 🔐 Authentication
@@ -118,9 +145,11 @@ npm run build
 - **Login**: Supports **Email** OR **Phone** + Password.
 - **Frontend Auth Flow**: Added dedicated **Login** and **Register** pages.
 - **Email Verification**: Registration triggers a 6-digit OTP email (via Nodemailer). Users must verify (`/api/auth/verify-email`) before logging in.
+- **Resend OTP with Cooldown**: Added `POST /api/auth/resend-verification-email` with server-side cooldown handling.
 - **Token Handling**: Angular HTTP interceptor now automatically attaches `Authorization: Bearer <token>` to `/api/*` requests.
 - **Logout**: Implemented via **Token Blacklisting** (tokens are stored in MongoDB with a TTL index until expiry).
 - **Account Status Enforcement**: Login and authenticated requests now block users who are **deleted**, **restricted**, or **pending approval**.
+- **Profile APIs**: Added `GET /api/auth/me` and `PUT /api/auth/me` for authenticated profile retrieval and updates.
 
 ### 🧭 Routing & Access Guards (Frontend)
 
@@ -168,8 +197,9 @@ npm run build
 - **Seeded Roles**: `admin`, `seller`, `customer`, `support`.
 - **Permissions**: Granular permissions (e.g., `orders:read:own`) are checked in controllers.
 - **User APIs Protection**: User management routes are now protected with `authenticate + authorizeRoles('admin')`.
+- **Seller Product Ownership Rules**: Seller users can only list/manage/update/delete products they own, while admins can manage all products.
 
 ### 🧪 API Testing
 
-- Postman collection: `electronics-e-commerce-api.postman_collection.json`.
+- Postman collection: `E-Commerce.postman_collection.json`.
 - Collection includes endpoints for new user-management actions (approve, restriction toggle, include deleted users).

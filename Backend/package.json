@@ -7,7 +7,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed:roles": "node src/scripts/seed-roles.js",
-    "seed:catalog": "node src/scripts/seed-catalog.js"
+    "seed:catalog": "node src/scripts/seed-catalog.js",
+    "assign:smartphones:fares": "node src/scripts/assign-smartphones-to-seller.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

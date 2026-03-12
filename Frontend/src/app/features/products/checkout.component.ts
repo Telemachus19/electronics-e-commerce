@@ -9,7 +9,7 @@ import {
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CartItem, CartService } from './cart.service';
+import { CartItem, CartService } from './cart/cart.service';
 import { OrdersService } from './orders.service';
 import { AuthService } from '../../core/auth/auth.service';
 

@@ -1,0 +1,197 @@
+<section class="users-page" aria-labelledby="user-management-title">
+  <div class="card">
+    <header class="header-row">
+      <h1 id="user-management-title">User Management</h1>
+    </header>
+
+    @if (isLoading()) {
+      <p class="state-message">Loading users...</p>
+    } @else if (users().length === 0) {
+      <p class="state-message">No users found.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th class="status-column">Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user._id; let index = $index) {
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">{{ initials(user) }}</div>
+                    <div>
+                      <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
+                      <p class="user-id">ID: #{{ userCode(index) }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="muted">{{ user.email }}</td>
+                <td class="muted">{{ user.phone }}</td>
+                <td>
+                  <div class="role-editor role-cell-content">
+                    @if (!isRoleEditorOpen(user._id)) {
+                      <div class="role-display-row">
+                        <span class="role role-{{ user.role.name.toLowerCase() }}">{{
+                          user.role.name
+                        }}</span>
+                        <button
+                          type="button"
+                          class="edit-role-icon"
+                          [disabled]="isActionInProgress(user._id)"
+                          aria-label="Edit role"
+                          (click)="openRoleEditor(user)"
+                        >
+                          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                            <path
+                              d="M4 20h4l10.2-10.2a1.8 1.8 0 0 0 0-2.6l-1.4-1.4a1.8 1.8 0 0 0-2.6 0L4 16v4z"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.8"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M13.3 6.7l4 4"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.8"
+                              stroke-linecap="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    } @else {
+                      <div class="role-edit-panel">
+                        <select
+                          class="role-select"
+                          [disabled]="isActionInProgress(user._id)"
+                          (input)="onRoleSelectionChange(user._id, $any($event.target).value)"
+                          (change)="onRoleSelectionChange(user._id, $any($event.target).value)"
+                        >
+                          @if (!selectedRoleId(user._id)) {
+                            <option value="" disabled selected>Select role</option>
+                          }
+                          @for (role of roles(); track role._id) {
+                            <option
+                              [value]="role._id"
+                              [selected]="selectedRoleId(user._id) === role._id"
+                            >
+                              {{ role.name }}
+                            </option>
+                          }
+                        </select>
+                        <div class="role-edit-actions">
+                          <button
+                            type="button"
+                            class="action action-role"
+                            [disabled]="isActionInProgress(user._id) || !canUpdateRole(user)"
+                            (click)="updateRole(user)"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            class="action action-cancel"
+                            [disabled]="isActionInProgress(user._id)"
+                            (click)="closeRoleEditor(user._id)"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </td>
+                <td class="status-column">
+                  <span class="status-badge {{ statusClass(user) }}">
+                    {{ statusLabel(user) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      type="button"
+                      class="action action-restrict action-with-icon"
+                      [disabled]="isActionInProgress(user._id)"
+                      (click)="toggleRestriction(user)"
+                    >
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                        @if (user.isRestricted === true) {
+                          <path
+                            d="M7 8.25V6.75a3 3 0 1 1 6 0v1.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M6.5 8.25h7A1.5 1.5 0 0 1 15 9.75v4.75A1.5 1.5 0 0 1 13.5 16h-7A1.5 1.5 0 0 1 5 14.5V9.75a1.5 1.5 0 0 1 1.5-1.5z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M10 11.15v1.9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                          />
+                        } @else {
+                          <path
+                            d="M12.2 8.25V6.75a2.6 2.6 0 1 0-5.2 0"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M6.5 8.25h7A1.5 1.5 0 0 1 15 9.75v4.75A1.5 1.5 0 0 1 13.5 16h-7A1.5 1.5 0 0 1 5 14.5V9.75a1.5 1.5 0 0 1 1.5-1.5z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M10 11.15v1.9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                          />
+                        }
+                      </svg>
+                      {{ user.isRestricted === true ? 'Unrestrict' : 'Restrict' }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="action action-delete action-with-icon"
+                      [disabled]="isActionInProgress(user._id)"
+                      (click)="softDeleteUser(user._id)"
+                    >
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                        <path d="M7 3a1 1 0 0 0-.894.553L5.382 5H3a1 1 0 1 0 0 2h1l.8 8.414A2 2 0 0 0 6.792 17h6.416a2 2 0 0 0 1.992-1.586L16 7h1a1 1 0 1 0 0-2h-2.382l-.724-1.447A1 1 0 0 0 13 3H7zm.618 2 .5-1h3.764l.5 1H7.618zM8 8a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1z" fill="currentColor" />
+                      </svg>
+                      Soft Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>
