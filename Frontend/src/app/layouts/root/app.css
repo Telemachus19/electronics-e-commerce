@@ -17,7 +17,6 @@
   padding: 0 1rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
 }
 
 .nav-panel {
@@ -74,7 +73,9 @@
 
 .search-wrap {
   margin-left: auto;
-  min-width: min(370px, 35vw);
+  flex: 1 1 220px;
+  width: clamp(180px, 28vw, 370px);
+  min-width: 0;
   height: 36px;
   border-radius: 999px;
   border: 1px solid #e5e8ee;
@@ -108,6 +109,7 @@
   display: flex;
   align-items: center;
   gap: 0.52rem;
+  flex-shrink: 0;
 }
 
 .nav-actions button,
@@ -243,17 +245,18 @@
 
 @media (max-width: 1024px) {
   .nav-container {
-    flex-wrap: wrap;
+    padding: 0 0.75rem;
   }
 
   .nav-panel {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
   }
 
   .search-wrap {
     margin-left: 0;
-    min-width: 100%;
-    flex: 1 1 100%;
+    width: clamp(140px, 24vw, 300px);
+    flex: 1 1 180px;
+    min-width: 0;
   }
 
   .brand {
@@ -262,6 +265,10 @@
 }
 
 @media (max-width: 900px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+
   .hamburger {
     display: flex;
     order: 2;
@@ -302,7 +309,9 @@
   .search-wrap {
     width: 100%;
     min-width: 100%;
-    margin-top: 0.75rem;
+    flex: 0 0 auto;
+    margin-top: 0.5rem;
+    padding: 0 0.8rem;
   }
 
   .nav-actions {
