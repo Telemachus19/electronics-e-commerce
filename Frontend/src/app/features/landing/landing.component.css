@@ -121,10 +121,18 @@ body {
   font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
     background-color 180ms ease,
     transform 180ms ease;
   pointer-events: auto;
+}
+
+.hero-arrow .arrow-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .hero-arrow:hover {

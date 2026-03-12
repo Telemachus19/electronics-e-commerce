@@ -1,5 +1,5 @@
-const app = require("./app");
 const env = require("./config/env");
+const app = require("./app");
 const { connectDatabase } = require("./config/database");
 
 const startServer = async () => {

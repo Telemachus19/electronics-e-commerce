@@ -9,6 +9,7 @@ import { CategoriesComponent } from '../../features/products/categories/categori
 import { ProductDetailComponent } from '../../features/products/product-detail/product-detail.component';
 import { WishlistComponent } from '../../features/products/wishlist/wishlist.component';
 import { CartComponent } from '../../features/products/cart/cart.component';
+import { CheckoutComponent } from '../../features/products/checkout.component';
 import { LoginComponent } from '../../features/auth/login/login.component';
 import { RegisterComponent } from '../../features/auth/register/register.component';
 import { VerifyUserComponent } from '../../features/auth/verification/verify-email/verify-user.component';
@@ -48,5 +49,6 @@ export const routes: Routes = [
   { path: 'products/:id', component: ProductDetailComponent },
   { path: 'wishlist', component: WishlistComponent },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },
 ];
