@@ -179,34 +179,6 @@
           "response": []
         },
         {
-          "name": "Approve User",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:5000/api/users/{{User ID}}/approve",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}",
-                "approve"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Restrict User",
           "request": {
             "method": "PATCH",

@@ -86,6 +86,12 @@ const productSchema = new mongoose.Schema(
       of: String,
       default: {},
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+      index: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -100,6 +106,7 @@ const productSchema = new mongoose.Schema(
 productSchema.index({ categoryId: 1, isActive: 1 });
 productSchema.index({ category: 1, isActive: 1 });
 productSchema.index({ price: 1, isActive: 1 });
+productSchema.index({ owner: 1, createdAt: -1 });
 productSchema.index({ createdAt: -1 });
 productSchema.index(
   { name: "text", description: "text" },

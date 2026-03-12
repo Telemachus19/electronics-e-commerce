@@ -11,7 +11,7 @@ export interface User {
   email: string;
   phone: string;
   role: Role;
-  isApproved: boolean;
+  isEmailVerified: boolean;
   isRestricted: boolean;
   isDeleted: boolean;
   deletedAt: string | null;

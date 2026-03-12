@@ -1,0 +1,75 @@
+.view-toggle-group {
+	border-color: #dbe3ef;
+}
+
+.view-toggle-btn {
+	border-color: transparent;
+	color: #475569;
+	background: transparent;
+	min-width: 36px;
+	min-height: 34px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.view-toggle-btn:hover {
+	background: #eef2ff;
+	color: #334155;
+	border-color: #e2e8f0;
+}
+
+.view-toggle-btn.is-active {
+	background: #2563eb;
+	border-color: #1d4ed8;
+	color: #ffffff;
+}
+
+.view-toggle-btn.is-active:hover {
+	background: #1d4ed8;
+	border-color: #1e40af;
+	color: #ffffff;
+}
+
+.wishlist-toggle {
+	width: 28px;
+	height: 28px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	border-radius: 999px;
+	background: transparent;
+	color: #64748b;
+	cursor: pointer;
+	padding: 0;
+	transition:
+		color 180ms ease,
+		background-color 180ms ease,
+		transform 180ms ease;
+}
+
+.wishlist-toggle svg {
+	width: 16px;
+	height: 16px;
+	flex: 0 0 auto;
+}
+
+.wishlist-toggle:hover {
+	color: #db2777;
+	background: #fff1f7;
+	transform: translateY(-1px);
+}
+
+.wishlist-toggle.is-saved {
+	color: #db2777;
+	background: #fff1f7;
+	transform: none;
+}
+
+.wishlist-toggle:focus-visible {
+	outline: 2px solid #f9a8d4;
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+

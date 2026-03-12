@@ -1,0 +1,85 @@
+<section class="editor-page" aria-labelledby="editor-title">
+  <div class="editor-card">
+    <div class="crumbs">
+      <a routerLink="/panel">Panel</a>
+      <span>/</span>
+      <span class="current">{{ title() }}</span>
+    </div>
+
+    <header class="editor-header">
+      <h1 id="editor-title">{{ title() }}</h1>
+      <p>Fill in the fields below and save to return back.</p>
+    </header>
+
+    @if (isLoading()) {
+      <p class="state-message">Loading product data...</p>
+    } @else {
+      @if (errorMessage()) {
+        <p class="state-message error">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="state-message success">{{ successMessage() }}</p>
+      }
+
+      <form class="editor-grid" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <label>
+          <span>Name *</span>
+          <input type="text" formControlName="name" placeholder="Product name" />
+        </label>
+
+        <label>
+          <span>Price *</span>
+          <input type="number" min="0" step="0.01" formControlName="price" />
+        </label>
+
+        <label>
+          <span>Stock *</span>
+          <input type="number" min="0" step="1" formControlName="stock" />
+        </label>
+
+        <label>
+          <span>Category</span>
+          <input type="text" formControlName="category" placeholder="laptops" />
+        </label>
+
+        <label>
+          <span>Brand</span>
+          <input type="text" formControlName="brand" placeholder="Dell" />
+        </label>
+
+        <label>
+          <span>Compare At Price</span>
+          <input type="number" min="0" step="0.01" formControlName="compareAtPrice" />
+        </label>
+
+        <label>
+          <span>Slug</span>
+          <input type="text" formControlName="slug" placeholder="dell-xps-13" />
+        </label>
+
+        <label>
+          <span>SKU</span>
+          <input type="text" formControlName="sku" placeholder="XPS13-001" />
+        </label>
+
+        <label class="full">
+          <span>Image URL</span>
+          <input type="url" formControlName="imageUrl" placeholder="https://..." />
+        </label>
+
+        <label class="full">
+          <span>Description</span>
+          <textarea rows="4" formControlName="description" placeholder="Describe the product"></textarea>
+        </label>
+
+        <div class="actions full">
+          <button type="submit" class="primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Saving...' : title() }}
+          </button>
+          <button type="button" class="secondary" (click)="cancel()">Cancel</button>
+        </div>
+      </form>
+    }
+  </div>
+</section>

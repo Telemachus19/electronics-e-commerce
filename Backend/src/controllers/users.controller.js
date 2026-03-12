@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const Role = require("../models/role.model");
 const bcrypt = require("bcryptjs");
+const { normalizePhoneNumber } = require("../utils/phone.util");
 
 const listUsers = async (req, res) => {
   try {
@@ -8,7 +9,7 @@ const listUsers = async (req, res) => {
 
     const users = await User.find(includeDeleted ? {} : { isDeleted: false })
       .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+        "firstName lastName email phone role isEmailVerified isRestricted isDeleted deletedAt",
       )
       .populate("role", "name");
 
@@ -20,7 +21,15 @@ const listUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password, role, isApproved } =
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      role,
+      isEmailVerified,
+    } =
       req.body;
 
     let roleId = role;
@@ -49,15 +58,16 @@ const createUser = async (req, res) => {
       firstName,
       lastName,
       email,
-      phone,
+      phone: normalizePhoneNumber(phone),
       password: hashedPassword,
       role: roleId,
-      isApproved: typeof isApproved === "boolean" ? isApproved : true,
+      isEmailVerified:
+        typeof isEmailVerified === "boolean" ? isEmailVerified : true,
     });
 
     const createdUser = await User.findById(user._id)
       .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+        "firstName lastName email phone role isEmailVerified isRestricted isDeleted deletedAt",
       )
       .populate("role", "name");
 
@@ -80,7 +90,7 @@ const getUserById = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id)
       .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+        "firstName lastName email phone role isEmailVerified isRestricted isDeleted deletedAt",
       )
       .populate("role", "name");
 
@@ -103,7 +113,7 @@ const updateUser = async (req, res) => {
       email,
       phone,
       role,
-      isApproved,
+      isEmailVerified,
       isRestricted,
     } = req.body;
 
@@ -122,7 +132,7 @@ const updateUser = async (req, res) => {
     }
 
     if (typeof phone === "string") {
-      updatePayload.phone = phone;
+      updatePayload.phone = normalizePhoneNumber(phone);
     }
 
     if (role !== undefined) {
@@ -133,8 +143,8 @@ const updateUser = async (req, res) => {
       updatePayload.role = role;
     }
 
-    if (typeof isApproved === "boolean") {
-      updatePayload.isApproved = isApproved;
+    if (typeof isEmailVerified === "boolean") {
+      updatePayload.isEmailVerified = isEmailVerified;
     }
 
     if (typeof isRestricted === "boolean") {
@@ -147,7 +157,7 @@ const updateUser = async (req, res) => {
       { new: true, runValidators: true },
     )
       .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+        "firstName lastName email phone role isEmailVerified isRestricted isDeleted deletedAt",
       )
       .populate("role", "name");
 
@@ -190,29 +200,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const approveUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findOneAndUpdate(
-      { _id: id, isDeleted: false },
-      { isApproved: true, isRestricted: false },
-      { new: true, runValidators: true },
-    )
-      .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
-      )
-      .populate("role", "name");
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({ data: user });
-  } catch (error) {
-    return res.status(500).json({ message: "Failed to approve user" });
-  }
-};
-
 const setUserRestriction = async (req, res) => {
   try {
     const { id } = req.params;
@@ -230,7 +217,7 @@ const setUserRestriction = async (req, res) => {
       { new: true, runValidators: true },
     )
       .select(
-        "firstName lastName email phone role isApproved isRestricted isDeleted deletedAt",
+        "firstName lastName email phone role isEmailVerified isRestricted isDeleted deletedAt",
       )
       .populate("role", "name");
 
@@ -250,6 +237,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  approveUser,
   setUserRestriction,
 };

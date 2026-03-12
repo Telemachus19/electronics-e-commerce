@@ -10,6 +10,16 @@ interface AuthUser {
   role: string;
 }
 
+interface UserProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  role: string;
+  isEmailVerified: boolean;
+}
+
 interface LoginResponse {
   message: string;
   token: string;
@@ -18,8 +28,29 @@ interface LoginResponse {
 
 interface RegisterResponse {
   message: string;
+  resendAvailableAt?: string;
   token?: string;
   user?: AuthUser;
+}
+
+interface ResendVerificationResponse {
+  message: string;
+  resendAvailableAt: string;
+}
+
+interface VerifyEmailResponse {
+  message: string;
+  token: string;
+  user: AuthUser;
+}
+
+interface GetUserProfileResponse {
+  data: UserProfile;
+}
+
+interface UpdateProfileResponse {
+  message: string;
+  data: UserProfile;
 }
 
 @Injectable({
@@ -33,9 +64,11 @@ export class AuthService {
 
   private readonly tokenState = signal<string | null>(localStorage.getItem(this.tokenStorageKey));
   private readonly roleState = signal<string | null>(this.extractRole(this.tokenState()));
+  private readonly userProfileState = signal<UserProfile | null>(null);
 
   readonly isAuthenticated = computed(() => !!this.tokenState());
   readonly role = computed(() => this.roleState());
+  readonly userProfile = computed(() => this.userProfileState());
 
   getToken(): string | null {
     return this.tokenState();
@@ -51,10 +84,40 @@ export class AuthService {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phone?: string;
     password: string;
   }): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.authApiUrl}/register`, payload);
+  }
+
+  resendVerificationEmail(payload: { email: string }): Observable<ResendVerificationResponse> {
+    return this.http.post<ResendVerificationResponse>(
+      `${this.authApiUrl}/resend-verification-email`,
+      payload,
+    );
+  }
+
+  verifyEmail(payload: { email: string; otp: string }): Observable<VerifyEmailResponse> {
+    return this.http
+      .post<VerifyEmailResponse>(`${this.authApiUrl}/verify-email`, payload)
+      .pipe(tap((response) => this.persistSession(response.token, response.user.role)));
+  }
+
+  getCurrentUser(): Observable<GetUserProfileResponse> {
+    return this.http
+      .get<GetUserProfileResponse>(`${this.authApiUrl}/me`)
+      .pipe(tap((response) => this.userProfileState.set(response.data)));
+  }
+
+  updateProfile(payload: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+  }): Observable<UpdateProfileResponse> {
+    return this.http
+      .put<UpdateProfileResponse>(`${this.authApiUrl}/me`, payload)
+      .pipe(tap((response) => this.userProfileState.set(response.data)));
   }
 
   logout() {
@@ -70,6 +133,7 @@ export class AuthService {
   clearSession(): void {
     this.tokenState.set(null);
     this.roleState.set(null);
+    this.userProfileState.set(null);
     localStorage.removeItem(this.tokenStorageKey);
   }
 

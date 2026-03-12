@@ -50,7 +50,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.83rem;
-  padding: 0.25rem 0.3rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 999px;
   border: 1px solid transparent;
   transition:
@@ -113,7 +113,8 @@
 }
 
 .nav-actions button,
-.nav-actions .with-badge {
+.nav-actions .with-badge,
+.nav-actions .nav-icon-link {
   width: 24px;
   height: 24px;
   border-radius: 999px;
@@ -130,14 +131,17 @@
 }
 
 .nav-actions button svg,
-.nav-actions .with-badge svg {
+.nav-actions .with-badge svg,
+.nav-actions .nav-icon-link svg {
   width: 18px;
   height: 18px;
 }
 
 .nav-actions button:hover,
 .nav-actions .with-badge:hover,
-.nav-actions .with-badge.active-action {
+.nav-actions .nav-icon-link:hover,
+.nav-actions .with-badge.active-action,
+.nav-actions .nav-icon-link.active-action {
   color: #2f6fd2;
 }
 
@@ -199,8 +203,11 @@
   color: #ffffff;
   font-size: 0.58rem;
   font-weight: 700;
-  display: grid;
-  place-items: center;
+  line-height: 2;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-content {
@@ -243,7 +250,7 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   .nav-container {
     padding: 0 0.75rem;
   }
@@ -264,7 +271,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .nav-container {
     flex-wrap: wrap;
   }

@@ -29,13 +29,6 @@ export class UsersService {
     });
   }
 
-  approveUser(userId: string) {
-    return this.http.patch<ApiItemResponse<User>>(
-      `${this.usersApiUrl}/${userId}/approve`,
-      {},
-    );
-  }
-
   setUserRestriction(userId: string, isRestricted: boolean) {
     return this.http.patch<ApiItemResponse<User>>(
       `${this.usersApiUrl}/${userId}/restriction`,

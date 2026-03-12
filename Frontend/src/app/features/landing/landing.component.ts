@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductsService, Product, ProductCategory } from '../products/products.service';
+import { ProductsService, Product, ProductCategory } from '../products/products/products.service';
 
 type CategoryCard = {
   name: string;
