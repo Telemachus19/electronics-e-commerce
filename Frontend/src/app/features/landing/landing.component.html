@@ -110,10 +110,10 @@
     <div class="products-grid">
       @for (product of trending(); track product._id) {
       <article class="product-card">
-        @if (productBadge(product); as badge) {
-        <p class="badge">{{ badge }}</p>
-        }
         <div class="product-image-wrap">
+          @if (productBadge(product); as badge) {
+          <p class="badge">{{ badge }}</p>
+          }
           <img class="product-image" [src]="productImage(product)" [alt]="product.name" loading="lazy" />
         </div>
 

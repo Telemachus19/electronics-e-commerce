@@ -238,18 +238,19 @@ body {
   position: relative;
   height: 100%;
   display: grid;
-  grid-template-rows: 28px 170px 1fr;
+  grid-template-rows: 170px 1fr;
   background-color: transparent;
   border: 0;
   padding: 0;
 }
 
 .badge {
-  margin: 0 0 0 0.6rem;
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  margin: 0;
   display: inline-block;
-  justify-self: start;
-  align-self: center;
-  grid-row: 1;
+  z-index: 1;
   padding: 0.25rem 0.56rem;
   border-radius: 999px;
   font-size: 0.66rem;
@@ -259,12 +260,13 @@ body {
 }
 
 .product-image-wrap {
-  grid-row: 2;
+  grid-row: 1;
   height: 170px;
   border-radius: 14px;
   margin: 0;
   overflow: hidden;
   background: #dfe4ec;
+  position: relative;
 }
 
 .product-image {
@@ -275,7 +277,7 @@ body {
 }
 
 .product-info {
-  grid-row: 3;
+  grid-row: 2;
   margin-top: 0.55rem;
   background-color: #eceef2;
   border-radius: 12px;
