@@ -19,8 +19,12 @@
         @if (heroProducts().length > 1) {
         <div class="hero-arrows" aria-label="Hero carousel controls">
           <button type="button" class="hero-arrow" (click)="previousHeroSlide()"
-            aria-label="Previous slide">&#8249;</button>
-          <button type="button" class="hero-arrow" (click)="nextHeroSlide()" aria-label="Next slide">&#8250;</button>
+            aria-label="Previous slide">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button type="button" class="hero-arrow" (click)="nextHeroSlide()" aria-label="Next slide">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
         </div>
         }
       </div>
