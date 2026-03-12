@@ -4,6 +4,7 @@ import { ProductsComponent } from '../../features/products/products.component';
 import { CategoriesComponent } from '../../features/products/categories.component';
 import { ProductDetailComponent } from '../../features/products/product-detail.component';
 import { CartComponent } from '../../features/products/cart.component';
+import { CheckoutComponent } from '../../features/products/checkout.component';
 import { LoginComponent } from '../../features/auth/login.component';
 import { RegisterComponent } from '../../features/auth/register.component';
 import { adminGuard, authGuard } from '../auth/auth.guard';
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailComponent },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },
 ];

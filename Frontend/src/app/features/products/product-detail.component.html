@@ -238,8 +238,7 @@
                 <div class="flex gap-1">
                   @for (star of starScale; track star) {
                   <button type="button" (click)="setNewRating(star)" (mouseenter)="setHoverRating(star)"
-                    (mouseleave)="setHoverRating(0)"
-                    class="text-2xl transition-colors"
+                    (mouseleave)="setHoverRating(0)" class="text-2xl transition-colors"
                     [class.text-amber-400]="star <= (hoverRating() || newRating())"
                     [class.text-slate-300]="star > (hoverRating() || newRating())"
                     [attr.aria-label]="star + ' star'">★</button>
