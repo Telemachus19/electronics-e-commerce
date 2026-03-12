@@ -26,16 +26,17 @@ export class App {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly cartItemCount = signal(0);
+  protected readonly cartItemCount = this.cartService.cartItemCount;
   protected readonly searchTerm = signal('');
 
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly role = computed(() => this.authService.role() ?? 'guest');
+  protected readonly menuOpen = signal(false);
 
   constructor() {
     effect(() => {
       if (!this.isAuthenticated()) {
-        this.cartItemCount.set(0);
+        this.cartService.clearCount();
         return;
       }
       this.refreshCartCount();
@@ -49,6 +50,7 @@ export class App {
       .subscribe(() => {
         const queryValue = this.router.parseUrl(this.router.url).queryParams['q'];
         this.searchTerm.set(typeof queryValue === 'string' ? queryValue : '');
+        this.closeMenu();
 
         if (this.isAuthenticated()) {
           this.refreshCartCount();
@@ -63,25 +65,26 @@ export class App {
 
   protected onSearchSubmit(): void {
     const query = this.searchTerm().trim();
+    this.closeMenu();
     void this.router.navigate(['/products'], {
       queryParams: query ? { q: query } : {},
     });
   }
 
+  protected toggleMenu(): void {
+    this.menuOpen.update((v) => !v);
+  }
+
+  protected closeMenu(): void {
+    this.menuOpen.set(false);
+  }
+
   protected logout(): void {
     this.authService.logout().subscribe();
+    this.closeMenu();
   }
 
   private refreshCartCount(): void {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        const items = response.data.items || [];
-        const total = items.reduce((sum, item) => sum + item.quantity, 0);
-        this.cartItemCount.set(total);
-      },
-      error: () => {
-        this.cartItemCount.set(0);
-      },
-    });
+    this.cartService.getCart().subscribe({ error: () => {} });
   }
 }

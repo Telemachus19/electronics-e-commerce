@@ -122,8 +122,10 @@
             {{ productRatingStars(product) }} <span>({{ product.ratingCount ?? 0 }})</span>
           </p>
           <h3>{{ product.name }}</h3>
-          <p class="price">${{ product.price }}</p>
-          <a class="btn btn-primary full" [routerLink]="['/products', productRouteId(product)]">View Product</a>
+          <div class="product-bottom">
+            <p class="price">${{ product.price }}</p>
+            <a class="btn btn-primary" [routerLink]="['/products', productRouteId(product)]">View</a>
+          </div>
         </div>
       </article>
       }
