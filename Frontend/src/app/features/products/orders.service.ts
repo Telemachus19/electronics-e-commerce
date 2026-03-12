@@ -33,6 +33,19 @@ export class OrdersService {
     return this.http.post<{ data: Order; stripeUrl?: string }>(this.ordersApiUrl, payload);
   }
 
+  createGuestOrder(payload: {
+    shippingAddress: string;
+    paymentMethod: 'cod' | 'card';
+    guestName: string;
+    guestEmail: string;
+    items: Array<{ productId: string; quantity: number }>;
+  }) {
+    return this.http.post<{ data: Order; stripeUrl?: string }>(
+      `${this.ordersApiUrl}/guest`,
+      payload,
+    );
+  }
+
   getOrders() {
     return this.http.get<{ data: Order[] }>(this.ordersApiUrl);
   }

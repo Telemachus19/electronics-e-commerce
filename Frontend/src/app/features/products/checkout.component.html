@@ -65,6 +65,23 @@
           <h2 class="text-xl font-bold text-slate-900">Shipping Address</h2>
           <p class="mt-1 text-sm text-slate-500">Enter the address where you'd like your order delivered.</p>
 
+          @if (isGuest()) {
+          <div class="mt-5 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="guestName" class="mb-2 block text-sm font-semibold text-slate-700">Full Name</label>
+              <input id="guestName" type="text" maxlength="100" [ngModel]="guestName()"
+                (ngModelChange)="guestName.set($event)" placeholder="John Doe"
+                class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200" />
+            </div>
+            <div>
+              <label for="guestEmail" class="mb-2 block text-sm font-semibold text-slate-700">Email Address</label>
+              <input id="guestEmail" type="email" maxlength="200" [ngModel]="guestEmail()"
+                (ngModelChange)="guestEmail.set($event)" placeholder="john@example.com"
+                class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200" />
+            </div>
+          </div>
+          }
+
           <div class="mt-5">
             <label for="shippingAddress" class="mb-2 block text-sm font-semibold text-slate-700">Full Address</label>
             <textarea id="shippingAddress" rows="4" maxlength="300" [ngModel]="shippingAddress()"
@@ -152,6 +169,10 @@
                 <button type="button" (click)="goToStep('shipping')"
                   class="text-xs font-semibold text-blue-600 transition hover:text-blue-800">Edit</button>
               </div>
+              @if (isGuest()) {
+              <p class="mt-2 text-sm font-semibold text-slate-900">{{ guestName() }}</p>
+              <p class="text-xs text-slate-500">{{ guestEmail() }}</p>
+              }
               <p class="mt-2 text-sm text-slate-800">{{ shippingAddress() }}</p>
             </div>
 

@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartItem, CartService } from './cart.service';
 import { OrdersService } from './orders.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 type CheckoutStep = 'shipping' | 'payment' | 'confirm';
 
@@ -23,7 +24,10 @@ type CheckoutStep = 'shipping' | 'payment' | 'confirm';
 export class CheckoutComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly ordersService = inject(OrdersService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+
+  protected readonly isGuest = computed(() => !this.authService.isAuthenticated());
 
   protected readonly step = signal<CheckoutStep>('shipping');
   protected readonly cartItems = signal<CartItem[]>([]);
@@ -36,6 +40,8 @@ export class CheckoutComponent implements OnInit {
   // Form fields
   protected readonly shippingAddress = signal('');
   protected readonly paymentMethod = signal<'cod' | 'card'>('cod');
+  protected readonly guestName = signal('');
+  protected readonly guestEmail = signal('');
 
   protected readonly subtotal = computed(() =>
     this.cartItems().reduce((sum, item) => sum + item.product.price * item.quantity, 0),
@@ -51,7 +57,11 @@ export class CheckoutComponent implements OnInit {
     this.cartItems().reduce((sum, item) => sum + item.quantity, 0),
   );
 
-  protected readonly isShippingValid = computed(() => this.shippingAddress().trim().length >= 10);
+  protected readonly isShippingValid = computed(() => {
+    const addrValid = this.shippingAddress().trim().length >= 10;
+    if (!this.isGuest()) return addrValid;
+    return addrValid && this.guestName().trim().length >= 2 && this.isValidEmail(this.guestEmail());
+  });
 
   private readonly steps: CheckoutStep[] = ['shipping', 'payment', 'confirm'];
 
@@ -84,28 +94,47 @@ export class CheckoutComponent implements OnInit {
     this.isPlacingOrder.set(true);
     this.error.set(null);
 
-    this.ordersService
-      .createOrder({
-        shippingAddress: this.shippingAddress().trim(),
-        paymentMethod: this.paymentMethod(),
-      })
-      .subscribe({
-        next: (response) => {
-          if (response.stripeUrl) {
-            window.location.href = response.stripeUrl;
-            return;
-          }
+    const order$ = this.isGuest()
+      ? this.ordersService.createGuestOrder({
+          shippingAddress: this.shippingAddress().trim(),
+          paymentMethod: this.paymentMethod(),
+          guestName: this.guestName().trim(),
+          guestEmail: this.guestEmail().trim(),
+          items: this.cartService.getGuestCartEntries().map((e) => ({
+            productId: e.productId,
+            quantity: e.quantity,
+          })),
+        })
+      : this.ordersService.createOrder({
+          shippingAddress: this.shippingAddress().trim(),
+          paymentMethod: this.paymentMethod(),
+        });
 
-          this.placedOrderId.set(response.data._id);
-          this.orderSuccess.set(true);
-          this.isPlacingOrder.set(false);
-          this.cartService.clearCount();
-        },
-        error: (err: { error?: { message?: string } }) => {
-          this.error.set(err?.error?.message || 'Failed to place order. Please try again.');
-          this.isPlacingOrder.set(false);
-        },
-      });
+    order$.subscribe({
+      next: (response) => {
+        if (response.stripeUrl) {
+          window.location.href = response.stripeUrl;
+          return;
+        }
+
+        this.placedOrderId.set(response.data._id);
+        this.orderSuccess.set(true);
+        this.isPlacingOrder.set(false);
+
+        if (this.isGuest()) {
+          this.cartService.clearGuestCart();
+        }
+        this.cartService.clearCount();
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.error.set(err?.error?.message || 'Failed to place order. Please try again.');
+        this.isPlacingOrder.set(false);
+      },
+    });
+  }
+
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   }
 
   private loadCart(): void {

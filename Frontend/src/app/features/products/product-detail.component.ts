@@ -167,30 +167,30 @@ export class ProductDetailComponent implements OnInit {
     const currentProduct = this.product();
     if (!currentProduct) return;
 
-    if (!this.authService.isAuthenticated()) {
-      this.cartFeedbackType.set('info');
-      this.cartFeedback.set('Please sign in to add items to your cart.');
-      return;
-    }
-
     this.isAddingToCart.set(true);
     this.cartFeedback.set(null);
 
-    this.cartService.addToCart(currentProduct._id, this.quantity()).subscribe({
-      next: () => {
-        this.cartFeedbackType.set('success');
-        this.cartFeedback.set('Added to cart successfully.');
-        this.isAddingToCart.set(false);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.cartFeedbackType.set('error');
-        const message =
-          (error.error as { message?: string } | null)?.message ||
-          'Unable to add to cart right now.';
-        this.cartFeedback.set(message);
-        this.isAddingToCart.set(false);
-      },
-    });
+    this.cartService
+      .addToCart(currentProduct._id, this.quantity(), {
+        name: currentProduct.name,
+        price: currentProduct.price,
+        imageUrl: currentProduct.imageUrl,
+      })
+      .subscribe({
+        next: () => {
+          this.cartFeedbackType.set('success');
+          this.cartFeedback.set('Added to cart successfully.');
+          this.isAddingToCart.set(false);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.cartFeedbackType.set('error');
+          const message =
+            (error.error as { message?: string } | null)?.message ||
+            'Unable to add to cart right now.';
+          this.cartFeedback.set(message);
+          this.isAddingToCart.set(false);
+        },
+      });
   }
 
   protected categoryLabel(): string {
