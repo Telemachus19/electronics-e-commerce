@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductsService } from '../products/products.service';
@@ -206,5 +213,5 @@ export class CategoriesComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
-   }
- }
+  }
+}

@@ -3,125 +3,118 @@
     <div class="profile-header">
       <h1>My Profile</h1>
       @if (!isEditing()) {
-      <button 
-        type="button" 
-        class="edit-btn" 
-        (click)="toggleEditMode()"
-        [disabled]="isLoading()">
-        Edit Profile
-      </button>
+        <button type="button" class="edit-btn" (click)="toggleEditMode()" [disabled]="isLoading()">
+          Edit Profile
+        </button>
       }
     </div>
 
     @if (isLoading()) {
-    <div class="loading">
-      <p>Loading your profile...</p>
-    </div>
+      <div class="loading">
+        <p>Loading your profile...</p>
+      </div>
     } @else {
-    @if (errorMessage()) {
-    <div class="alert alert-error">
-      {{ errorMessage() }}
-    </div>
-    }
-
-    @if (successMessage()) {
-    <div class="alert alert-success">
-      {{ successMessage() }}
-    </div>
-    }
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="profile-section">
-        <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input
-            id="firstName"
-            type="text"
-            formControlName="firstName"
-            [readonly]="!isEditing()"
-            [class.editable]="isEditing()" />
-          @if (isEditing() && form.get('firstName')?.invalid && form.get('firstName')?.touched) {
-          <span class="error-text">
-            @if (form.get('firstName')?.errors?.['required']) {
-            First name is required
-            }
-            @if (form.get('firstName')?.errors?.['minlength']) {
-            First name must be at least 2 characters
-            }
-          </span>
-          }
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          {{ errorMessage() }}
         </div>
-
-        <div class="form-group">
-          <label for="lastName">Last Name</label>
-          <input
-            id="lastName"
-            type="text"
-            formControlName="lastName"
-            [readonly]="!isEditing()"
-            [class.editable]="isEditing()" />
-          @if (isEditing() && form.get('lastName')?.invalid && form.get('lastName')?.touched) {
-          <span class="error-text">
-            @if (form.get('lastName')?.errors?.['required']) {
-            Last name is required
-            }
-            @if (form.get('lastName')?.errors?.['minlength']) {
-            Last name must be at least 2 characters
-            }
-          </span>
-          }
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
-            readonly
-            class="readonly-field" />
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input
-            id="phone"
-            type="tel"
-            formControlName="phone"
-            [readonly]="!isEditing()"
-            [class.editable]="isEditing()"
-            placeholder="01166391900 or +201166391900" />
-          @if (isEditing() && form.get('phone')?.invalid && form.get('phone')?.touched) {
-          <span class="error-text">
-            @if (form.get('phone')?.errors?.['required']) {
-            Phone number is required
-            }
-            @if (form.get('phone')?.errors?.['pattern']) {
-            Please enter a valid Egyptian phone number
-            }
-          </span>
-          }
-        </div>
-      </div>
-
-      @if (isEditing()) {
-      <div class="profile-actions">
-        <button
-          type="submit"
-          class="save-btn"
-          [disabled]="form.invalid || isSaving()">
-          {{ isSaving() ? 'Saving...' : 'Save Changes' }}
-        </button>
-        <button
-          type="button"
-          class="cancel-btn"
-          (click)="cancel()"
-          [disabled]="isSaving()">
-          Cancel
-        </button>
-      </div>
       }
-    </form>
+
+      @if (successMessage()) {
+        <div class="alert alert-success">
+          {{ successMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="profile-section">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              [readonly]="!isEditing()"
+              [class.editable]="isEditing()"
+            />
+            @if (isEditing() && form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+              <span class="error-text">
+                @if (form.get('firstName')?.errors?.['required']) {
+                  First name is required
+                }
+                @if (form.get('firstName')?.errors?.['minlength']) {
+                  First name must be at least 2 characters
+                }
+              </span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              [readonly]="!isEditing()"
+              [class.editable]="isEditing()"
+            />
+            @if (isEditing() && form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+              <span class="error-text">
+                @if (form.get('lastName')?.errors?.['required']) {
+                  Last name is required
+                }
+                @if (form.get('lastName')?.errors?.['minlength']) {
+                  Last name must be at least 2 characters
+                }
+              </span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              readonly
+              class="readonly-field"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              [readonly]="!isEditing()"
+              [class.editable]="isEditing()"
+              placeholder="01166391900 or +201166391900"
+            />
+            @if (isEditing() && form.get('phone')?.invalid && form.get('phone')?.touched) {
+              <span class="error-text">
+                @if (form.get('phone')?.errors?.['required']) {
+                  Phone number is required
+                }
+                @if (form.get('phone')?.errors?.['pattern']) {
+                  Please enter a valid Egyptian phone number
+                }
+              </span>
+            }
+          </div>
+        </div>
+
+        @if (isEditing()) {
+          <div class="profile-actions">
+            <button type="submit" class="save-btn" [disabled]="form.invalid || isSaving()">
+              {{ isSaving() ? 'Saving...' : 'Save Changes' }}
+            </button>
+            <button type="button" class="cancel-btn" (click)="cancel()" [disabled]="isSaving()">
+              Cancel
+            </button>
+          </div>
+        }
+      </form>
     }
   </div>
 

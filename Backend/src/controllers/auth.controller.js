@@ -38,7 +38,9 @@ const register = async (req, res) => {
     // Check if user exists
     const queryConditions = [{ email }];
     if (normalizedPhone) {
-      queryConditions.push({ phone: { $in: buildPhoneSearchVariants(normalizedPhone) } });
+      queryConditions.push({
+        phone: { $in: buildPhoneSearchVariants(normalizedPhone) },
+      });
     }
 
     const existingUser = await User.findOne({

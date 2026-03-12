@@ -17,15 +17,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users/{{User ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}"
-              ]
+              "path": ["api", "users", "{{User ID}}"]
             }
           },
           "response": []
@@ -50,14 +44,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users"
-              ]
+              "path": ["api", "users"]
             }
           },
           "response": []
@@ -79,14 +68,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users"
-              ]
+              "path": ["api", "users"]
             }
           },
           "response": []
@@ -108,15 +92,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users/{{User ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}"
-              ]
+              "path": ["api", "users", "{{User ID}}"]
             }
           },
           "response": []
@@ -133,15 +111,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users/{{User ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}"
-              ]
+              "path": ["api", "users", "{{User ID}}"]
             }
           },
           "response": []
@@ -160,14 +132,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users?includeDeleted=true",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users"
-              ],
+              "path": ["api", "users"],
               "query": [
                 {
                   "key": "includeDeleted",
@@ -206,16 +173,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users/{{User ID}}/restriction",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}",
-                "restriction"
-              ]
+              "path": ["api", "users", "{{User ID}}", "restriction"]
             }
           },
           "response": []
@@ -248,16 +208,9 @@
             "url": {
               "raw": "http://localhost:5000/api/users/{{User ID}}/restriction",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "users",
-                "{{User ID}}",
-                "restriction"
-              ]
+              "path": ["api", "users", "{{User ID}}", "restriction"]
             }
           },
           "response": []
@@ -275,14 +228,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products"
-              ]
+              "path": ["api", "products"]
             }
           },
           "response": []
@@ -295,15 +243,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products",
-                "{{Product ID}}"
-              ]
+              "path": ["api", "products", "{{Product ID}}"]
             }
           },
           "response": []
@@ -325,14 +267,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products"
-              ]
+              "path": ["api", "products"]
             }
           },
           "response": []
@@ -354,15 +291,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products",
-                "{{Product ID}}"
-              ]
+              "path": ["api", "products", "{{Product ID}}"]
             }
           },
           "response": []
@@ -379,15 +310,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products",
-                "{{Product ID}}"
-              ]
+              "path": ["api", "products", "{{Product ID}}"]
             }
           },
           "response": []
@@ -412,16 +337,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products",
-                "{{Product ID}}",
-                "reviews"
-              ]
+              "path": ["api", "products", "{{Product ID}}", "reviews"]
             }
           },
           "response": []
@@ -441,9 +359,7 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
               "path": [
                 "api",
@@ -473,16 +389,9 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "products",
-                "{{Product ID}}",
-                "reviews"
-              ]
+              "path": ["api", "products", "{{Product ID}}", "reviews"]
             }
           },
           "response": []
@@ -504,9 +413,7 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
               "path": [
                 "api",
@@ -531,9 +438,7 @@
             "url": {
               "raw": "http://localhost:5000/api/products/{{Product ID}}/reviews/{{Review ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
               "path": [
                 "api",
@@ -566,14 +471,9 @@
             "url": {
               "raw": "http://localhost:5000/api/roles",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "roles"
-              ]
+              "path": ["api", "roles"]
             }
           },
           "response": []
@@ -586,15 +486,9 @@
             "url": {
               "raw": "http://localhost:5000/api/roles/{{Role ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "roles",
-                "{{Role ID}}"
-              ]
+              "path": ["api", "roles", "{{Role ID}}"]
             }
           },
           "response": []
@@ -616,14 +510,9 @@
             "url": {
               "raw": "http://localhost:5000/api/roles",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "roles"
-              ]
+              "path": ["api", "roles"]
             }
           },
           "response": []
@@ -645,15 +534,9 @@
             "url": {
               "raw": "http://localhost:5000/api/roles/{{Role ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "roles",
-                "{{Role ID}}"
-              ]
+              "path": ["api", "roles", "{{Role ID}}"]
             }
           },
           "response": []
@@ -666,15 +549,9 @@
             "url": {
               "raw": "http://localhost:5000/api/roles/{{Role ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "roles",
-                "{{Role ID}}"
-              ]
+              "path": ["api", "roles", "{{Role ID}}"]
             }
           },
           "response": []
@@ -698,14 +575,9 @@
             "url": {
               "raw": "http://localhost:5000/api/orders",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "orders"
-              ]
+              "path": ["api", "orders"]
             },
             "description": "Generated from cURL: curl --location --request GET '{{baseUrl}}/api/orders' --header 'Authorization: Bearer {{token}}'"
           },
@@ -719,15 +591,9 @@
             "url": {
               "raw": "http://localhost:5000/api/orders/{{Order ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "orders",
-                "{{Order ID}}"
-              ]
+              "path": ["api", "orders", "{{Order ID}}"]
             }
           },
           "response": []
@@ -749,15 +615,9 @@
             "url": {
               "raw": "http://localhost:5000/api/orders/{{Order ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "orders",
-                "{{Order ID}}"
-              ]
+              "path": ["api", "orders", "{{Order ID}}"]
             }
           },
           "response": []
@@ -770,15 +630,9 @@
             "url": {
               "raw": "http://localhost:5000/api/orders/{{Order ID}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "orders",
-                "{{Order ID}}"
-              ]
+              "path": ["api", "orders", "{{Order ID}}"]
             }
           },
           "response": []
@@ -811,14 +665,9 @@
             "url": {
               "raw": "http://localhost:5000/api/orders",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "orders"
-              ]
+              "path": ["api", "orders"]
             },
             "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/orders' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{\"shippingAddress\":\"{{shippingAddress}}\"}'"
           },
@@ -837,14 +686,9 @@
             "url": {
               "raw": "http://localhost:5000/api/cart",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "cart"
-              ]
+              "path": ["api", "cart"]
             }
           },
           "response": []
@@ -877,14 +721,9 @@
             "url": {
               "raw": "http://localhost:5000/api/cart",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "cart"
-              ]
+              "path": ["api", "cart"]
             },
             "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/cart' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{\"productId\":\"{{productId}}\",\"quantity\":1}'"
           },
@@ -904,15 +743,9 @@
             "url": {
               "raw": "http://localhost:5000/api/cart/{{productId}}",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "cart",
-                "{{productId}}"
-              ]
+              "path": ["api", "cart", "{{productId}}"]
             },
             "description": "Generated from cURL: curl --location --request DELETE '{{baseUrl}}/api/cart/{{productId}}' --header 'Authorization: Bearer {{token}}'"
           },
@@ -930,15 +763,9 @@
             "url": {
               "raw": "http://localhost:5000/api/cart/merge",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "cart",
-                "merge"
-              ]
+              "path": ["api", "cart", "merge"]
             }
           },
           "response": []
@@ -997,15 +824,9 @@
             "url": {
               "raw": "http://localhost:5000/api/auth/register",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -1066,15 +887,9 @@
             "url": {
               "raw": "http://localhost:5000/api/auth/login",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "path": ["api", "auth", "login"]
             },
             "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/auth/login' --header 'Content-Type: application/json' --data-raw '{\"identifier\":\"{{identifier}}\",\"password\":\"{{password}}\"}'"
           },
@@ -1094,15 +909,9 @@
             "url": {
               "raw": "http://localhost:5000/api/auth/logout",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "auth",
-                "logout"
-              ]
+              "path": ["api", "auth", "logout"]
             },
             "description": "Generated from cURL: curl --location --request POST '{{baseUrl}}/api/auth/logout' --header 'Authorization: Bearer {{token}}'"
           },
@@ -1125,15 +934,9 @@
             "url": {
               "raw": "http://localhost:5000/api/auth/verify-email",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "5000",
-              "path": [
-                "api",
-                "auth",
-                "verify-email"
-              ]
+              "path": ["api", "auth", "verify-email"]
             }
           },
           "response": []
@@ -1149,9 +952,7 @@
             "type": "text/javascript",
             "packages": {},
             "requests": {},
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         },
         {
@@ -1160,9 +961,7 @@
             "type": "text/javascript",
             "packages": {},
             "requests": {},
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         }
       ]
@@ -1185,9 +984,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
@@ -1196,9 +993,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

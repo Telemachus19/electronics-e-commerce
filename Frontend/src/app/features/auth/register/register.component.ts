@@ -42,7 +42,9 @@ export class RegisterComponent {
     this.authService.register(this.registerForm.getRawValue()).subscribe({
       next: (response) => {
         this.isSubmitting.set(false);
-        this.successMessage.set('Account created successfully. Please verify your email using the OTP.');
+        this.successMessage.set(
+          'Account created successfully. Please verify your email using the OTP.',
+        );
         this.router.navigate(['/verify-user/otp'], {
           queryParams: {
             email: this.registerForm.controls.email.value,

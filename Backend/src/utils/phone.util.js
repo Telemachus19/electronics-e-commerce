@@ -13,7 +13,9 @@ const normalizePhoneNumber = (value) => {
     return sanitizedPhone;
   }
 
-  const egyptMobileWithCountryCode = sanitizedPhone.match(/^\+?20(1[0125]\d{8})$/);
+  const egyptMobileWithCountryCode = sanitizedPhone.match(
+    /^\+?20(1[0125]\d{8})$/,
+  );
   if (egyptMobileWithCountryCode) {
     return `+20${egyptMobileWithCountryCode[1]}`;
   }

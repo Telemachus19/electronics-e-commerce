@@ -13,7 +13,9 @@
       <label class="field-label" for="email">Email</label>
       <input id="email" class="field-input" type="email" formControlName="email" />
 
-      <label class="field-label" for="phone">Phone <span class="optional-label">(Optional)</span></label>
+      <label class="field-label" for="phone"
+        >Phone <span class="optional-label">(Optional)</span></label
+      >
       <input
         id="phone"
         class="field-input"
@@ -24,7 +26,9 @@
       />
 
       @if (registerForm.controls.phone.touched && registerForm.controls.phone.invalid) {
-        <p class="error-message" role="alert">Use a valid number like 01166391900 or +201166391900.</p>
+        <p class="error-message" role="alert">
+          Use a valid number like 01166391900 or +201166391900.
+        </p>
       }
 
       <label class="field-label" for="password">Password</label>

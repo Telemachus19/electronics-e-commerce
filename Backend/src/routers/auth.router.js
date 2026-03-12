@@ -1,12 +1,12 @@
 const express = require("express");
 const {
-	register,
-	resendVerificationEmail,
-	login,
-	logout,
-	verifyEmail,
-	getCurrentUser,
-	updateOwnProfile,
+  register,
+  resendVerificationEmail,
+  login,
+  logout,
+  verifyEmail,
+  getCurrentUser,
+  updateOwnProfile,
 } = require("../controllers/auth.controller");
 const { authenticate } = require("../middlewares/auth.middleware");
 

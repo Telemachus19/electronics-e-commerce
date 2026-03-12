@@ -27,13 +27,7 @@ export class ProfileComponent implements OnInit {
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^(?:\+20|20|0)?1[0125]\d{8}$/),
-      ],
-    ],
+    phone: ['', [Validators.required, Validators.pattern(/^(?:\+20|20|0)?1[0125]\d{8}$/)]],
   });
 
   ngOnInit(): void {
@@ -62,7 +56,7 @@ export class ProfileComponent implements OnInit {
     this.isEditing.set(!this.isEditing());
     this.errorMessage.set('');
     this.successMessage.set('');
-    
+
     if (!this.isEditing()) {
       this.loadUserProfile();
     }

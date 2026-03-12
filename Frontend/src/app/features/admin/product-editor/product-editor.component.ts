@@ -1,10 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-  ProductUpsertPayload,
-  ProductsService,
-} from '../../products/products/products.service';
+import { ProductUpsertPayload, ProductsService } from '../../products/products/products.service';
 
 @Component({
   selector: 'app-product-editor',
@@ -100,7 +104,9 @@ export class ProductEditorComponent implements OnInit {
     request$.subscribe({
       next: () => {
         this.isSaving.set(false);
-        this.successMessage.set(productId ? 'Product updated successfully.' : 'Product created successfully.');
+        this.successMessage.set(
+          productId ? 'Product updated successfully.' : 'Product created successfully.',
+        );
         setTimeout(() => {
           void this.router.navigateByUrl(this.returnTo());
         }, 400);
@@ -119,9 +125,7 @@ export class ProductEditorComponent implements OnInit {
   private buildPayload(): ProductUpsertPayload {
     const raw = this.form.getRawValue();
 
-    const compareAtPrice = raw.compareAtPrice.trim()
-      ? Number(raw.compareAtPrice)
-      : null;
+    const compareAtPrice = raw.compareAtPrice.trim() ? Number(raw.compareAtPrice) : null;
 
     return {
       name: raw.name.trim(),

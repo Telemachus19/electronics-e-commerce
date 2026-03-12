@@ -29,8 +29,7 @@ const createUser = async (req, res) => {
       password,
       role,
       isEmailVerified,
-    } =
-      req.body;
+    } = req.body;
 
     let roleId = role;
     if (!roleId) {

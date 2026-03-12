@@ -82,7 +82,9 @@ export class WishlistService {
       if (!Array.isArray(parsed)) {
         return [];
       }
-      return parsed.filter((item) => typeof item?._id === 'string' && typeof item?.name === 'string');
+      return parsed.filter(
+        (item) => typeof item?._id === 'string' && typeof item?.name === 'string',
+      );
     } catch {
       return [];
     }

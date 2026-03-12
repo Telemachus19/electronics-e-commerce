@@ -150,23 +150,27 @@ export class VerifyOtpComponent {
     this.resendMessage.set('');
     this.isSubmitting.set(true);
 
-    this.authService.verifyEmail({
-      email: this.email(),
-      otp: this.otpControlNames.map((controlName) => this.otpForm.controls[controlName].value).join(''),
-    }).subscribe({
-      next: () => {
-        this.isSubmitting.set(false);
-        this.isVerified.set(true);
-        this.successMessage.set('Email verified successfully. Redirecting to the home page...');
-        timer(1800)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe(() => this.router.navigate(['/']));
-      },
-      error: (error: { error?: { message?: string } }) => {
-        this.isSubmitting.set(false);
-        this.errorMessage.set(error.error?.message ?? 'Failed to verify account.');
-      },
-    });
+    this.authService
+      .verifyEmail({
+        email: this.email(),
+        otp: this.otpControlNames
+          .map((controlName) => this.otpForm.controls[controlName].value)
+          .join(''),
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.isVerified.set(true);
+          this.successMessage.set('Email verified successfully. Redirecting to the home page...');
+          timer(1800)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.router.navigate(['/']));
+        },
+        error: (error: { error?: { message?: string } }) => {
+          this.isSubmitting.set(false);
+          this.errorMessage.set(error.error?.message ?? 'Failed to verify account.');
+        },
+      });
   }
 
   protected resendVerificationEmail(): void {

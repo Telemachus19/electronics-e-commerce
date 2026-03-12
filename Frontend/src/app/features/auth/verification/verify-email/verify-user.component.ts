@@ -47,21 +47,23 @@ export class VerifyUserComponent {
     this.errorMessage.set('');
     this.isSubmitting.set(true);
 
-    this.authService.resendVerificationEmail({ email: this.emailForm.controls.email.value }).subscribe({
-      next: (response) => {
-        this.isSubmitting.set(false);
-        this.router.navigate(['/verify-user/otp'], {
-          queryParams: {
-            email: this.emailForm.controls.email.value,
-            registered: this.route.snapshot.queryParamMap.get('registered') ?? 'false',
-            resendAvailableAt: response.resendAvailableAt,
-          },
-        });
-      },
-      error: (error: { error?: { message?: string } }) => {
-        this.isSubmitting.set(false);
-        this.errorMessage.set(error.error?.message ?? 'Failed to send verification code.');
-      },
-    });
+    this.authService
+      .resendVerificationEmail({ email: this.emailForm.controls.email.value })
+      .subscribe({
+        next: (response) => {
+          this.isSubmitting.set(false);
+          this.router.navigate(['/verify-user/otp'], {
+            queryParams: {
+              email: this.emailForm.controls.email.value,
+              registered: this.route.snapshot.queryParamMap.get('registered') ?? 'false',
+              resendAvailableAt: response.resendAvailableAt,
+            },
+          });
+        },
+        error: (error: { error?: { message?: string } }) => {
+          this.isSubmitting.set(false);
+          this.errorMessage.set(error.error?.message ?? 'Failed to send verification code.');
+        },
+      });
   }
 }
