@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductsService, Product, Review } from './products.service';
@@ -17,7 +18,7 @@ import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [RouterLink, DatePipe, DecimalPipe],
+  imports: [RouterLink, DatePipe, DecimalPipe, FormsModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +43,15 @@ export class ProductDetailComponent implements OnInit {
   protected readonly cartFeedbackType = signal<'success' | 'error' | 'info'>('info');
   protected readonly isLoading = signal(true);
   protected readonly error = signal<string | null>(null);
+
+  // Review form state
+  protected readonly newRating = signal(0);
+  protected readonly hoverRating = signal(0);
+  protected readonly newComment = signal('');
+  protected readonly isSubmittingReview = signal(false);
+  protected readonly reviewFeedback = signal<string | null>(null);
+  protected readonly reviewFeedbackType = signal<'success' | 'error'>('error');
+  protected readonly starScale = [1, 2, 3, 4, 5] as const;
 
   protected readonly galleryImages = computed(() => {
     const current = this.product();
@@ -198,6 +208,64 @@ export class ProductDetailComponent implements OnInit {
     return `${first}${last}`.toUpperCase() || 'U';
   }
 
+  protected setNewRating(rating: number): void {
+    this.newRating.set(rating);
+  }
+
+  protected setHoverRating(rating: number): void {
+    this.hoverRating.set(rating);
+  }
+
+  protected submitReview(): void {
+    const currentProduct = this.product();
+    if (!currentProduct) return;
+
+    if (!this.authService.isAuthenticated()) {
+      this.reviewFeedbackType.set('error');
+      this.reviewFeedback.set('Please sign in to leave a review.');
+      return;
+    }
+
+    if (this.newRating() === 0) {
+      this.reviewFeedbackType.set('error');
+      this.reviewFeedback.set('Please select a rating.');
+      return;
+    }
+
+    this.isSubmittingReview.set(true);
+    this.reviewFeedback.set(null);
+
+    const payload: { rating: number; comment?: string } = { rating: this.newRating() };
+    const comment = this.newComment().trim();
+    if (comment) payload.comment = comment;
+
+    this.productsService.createReview(currentProduct._id, payload).subscribe({
+      next: (response) => {
+        this.reviews.update((prev) => [response.data, ...prev]);
+        this.newRating.set(0);
+        this.hoverRating.set(0);
+        this.newComment.set('');
+        this.reviewFeedbackType.set('success');
+        this.reviewFeedback.set('Review submitted successfully!');
+        this.isSubmittingReview.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.reviewFeedbackType.set('error');
+        const message =
+          (err.error as { message?: string } | null)?.message || 'Failed to submit review.';
+        this.reviewFeedback.set(message);
+        this.isSubmittingReview.set(false);
+      },
+    });
+  }
+
+  private loadReviews(productId: string): void {
+    this.productsService.getReviewsByProduct(productId).subscribe({
+      next: (response) => this.reviews.set(response.data),
+      error: () => {},
+    });
+  }
+
   private loadProduct(productId: string): void {
     this.isLoading.set(true);
     this.error.set(null);
@@ -206,6 +274,7 @@ export class ProductDetailComponent implements OnInit {
       next: (response) => {
         this.product.set(response.data);
         this.reviews.set(response.data.reviews || []);
+        this.loadReviews(productId);
         this.activeImageIndex.set(0);
         this.activeTab.set('description');
         this.quantity.set(1);

@@ -102,7 +102,7 @@ export class ProductsService {
     return this.http.get<{ data: Review[] }>(`${this.productsApiUrl}/${productId}/reviews`);
   }
 
-  createReview(productId: string, review: { userId: string; rating: number; comment?: string }) {
+  createReview(productId: string, review: { rating: number; comment?: string }) {
     return this.http.post<{ data: Review }>(`${this.productsApiUrl}/${productId}/reviews`, review);
   }
 }

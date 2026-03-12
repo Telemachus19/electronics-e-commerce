@@ -227,6 +227,53 @@
             </div>
           </div>
 
+          <!-- Write a Review Form -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <h3 class="text-lg font-bold text-slate-900">Write a Review</h3>
+
+            @if (!isLoading()) {
+            <div class="mt-4 space-y-4">
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Your Rating</label>
+                <div class="flex gap-1">
+                  @for (star of starScale; track star) {
+                  <button type="button" (click)="setNewRating(star)" (mouseenter)="setHoverRating(star)"
+                    (mouseleave)="setHoverRating(0)"
+                    class="text-2xl transition-colors"
+                    [class.text-amber-400]="star <= (hoverRating() || newRating())"
+                    [class.text-slate-300]="star > (hoverRating() || newRating())"
+                    [attr.aria-label]="star + ' star'">★</button>
+                  }
+                  @if (newRating() > 0) {
+                  <span class="ml-2 self-center text-sm text-slate-500">{{ newRating() }}/5</span>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label for="reviewComment" class="mb-2 block text-sm font-semibold text-slate-700">Comment
+                  <span class="font-normal text-slate-400">(optional)</span></label>
+                <textarea id="reviewComment" rows="3" maxlength="500" [ngModel]="newComment()"
+                  (ngModelChange)="newComment.set($event)" placeholder="Share your experience with this product..."
+                  class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200"></textarea>
+                <p class="mt-1 text-right text-xs text-slate-400">{{ newComment().length }}/500</p>
+              </div>
+
+              @if (reviewFeedback()) {
+              <p class="text-sm font-medium" [class.text-emerald-600]="reviewFeedbackType() === 'success'"
+                [class.text-red-600]="reviewFeedbackType() === 'error'">
+                {{ reviewFeedback() }}
+              </p>
+              }
+
+              <button type="button" (click)="submitReview()" [disabled]="isSubmittingReview() || newRating() === 0"
+                class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400">
+                {{ isSubmittingReview() ? 'Submitting...' : 'Submit Review' }}
+              </button>
+            </div>
+            }
+          </div>
+
           @if (reviews().length > 0) {
           <div class="space-y-4">
             @for (review of reviews(); track review._id) {
