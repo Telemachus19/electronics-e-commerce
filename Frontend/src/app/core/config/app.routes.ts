@@ -48,7 +48,7 @@ export const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailComponent },
   { path: 'wishlist', component: WishlistComponent },
-  { path: 'cart', component: CartComponent, canActivate: [authGuard] },
-  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
+  { path: 'cart', component: CartComponent },
+  { path: 'checkout', component: CheckoutComponent },
   { path: '**', redirectTo: '' },
 ];
