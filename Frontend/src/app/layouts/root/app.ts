@@ -38,11 +38,8 @@ export class App {
 
   constructor() {
     effect(() => {
-      if (!this.isAuthenticated()) {
-        this.cartService.clearCount();
-        return;
-      }
-      this.refreshCartCount();
+      this.isAuthenticated();
+      this.cartService.initCount();
     });
 
     this.router.events
@@ -54,10 +51,7 @@ export class App {
         const queryValue = this.router.parseUrl(this.router.url).queryParams['q'];
         this.searchTerm.set(typeof queryValue === 'string' ? queryValue : '');
         this.closeMenu();
-
-        if (this.isAuthenticated()) {
-          this.refreshCartCount();
-        }
+        this.cartService.initCount();
       });
   }
 
@@ -85,9 +79,5 @@ export class App {
   protected logout(): void {
     this.authService.logout().subscribe();
     this.closeMenu();
-  }
-
-  private refreshCartCount(): void {
-    this.cartService.getCart().subscribe({ error: () => {} });
   }
 }

@@ -11,8 +11,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { interval, startWith, timer } from 'rxjs';
+import { interval, startWith, switchMap, timer } from 'rxjs';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { CartService } from '../../../products/cart/cart.service';
 
 const OTP_CONTROL_NAMES = ['digit0', 'digit1', 'digit2', 'digit3', 'digit4', 'digit5'] as const;
 
@@ -27,6 +28,7 @@ type OtpControlName = (typeof OTP_CONTROL_NAMES)[number];
 })
 export class VerifyOtpComponent {
   private readonly authService = inject(AuthService);
+  private readonly cartService = inject(CartService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -157,14 +159,16 @@ export class VerifyOtpComponent {
           .map((controlName) => this.otpForm.controls[controlName].value)
           .join(''),
       })
+      .pipe(switchMap(() => this.cartService.mergeGuestCartAfterLogin()))
       .subscribe({
         next: () => {
           this.isSubmitting.set(false);
           this.isVerified.set(true);
-          this.successMessage.set('Email verified successfully. Redirecting to the home page...');
+          this.successMessage.set('Email verified successfully. Redirecting...');
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
           timer(1800)
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => this.router.navigate(['/']));
+            .subscribe(() => this.router.navigateByUrl(returnUrl));
         },
         error: (error: { error?: { message?: string } }) => {
           this.isSubmitting.set(false);

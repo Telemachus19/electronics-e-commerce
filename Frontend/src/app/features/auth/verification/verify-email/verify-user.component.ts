@@ -57,6 +57,7 @@ export class VerifyUserComponent {
               email: this.emailForm.controls.email.value,
               registered: this.route.snapshot.queryParamMap.get('registered') ?? 'false',
               resendAvailableAt: response.resendAvailableAt,
+              returnUrl: this.route.snapshot.queryParamMap.get('returnUrl') ?? undefined,
             },
           });
         },

@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { switchMap } from 'rxjs';
 import { AuthService } from '../../../core/auth/auth.service';
+import { CartService } from '../../products/cart/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +14,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly cartService = inject(CartService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -19,6 +22,8 @@ export class LoginComponent {
   protected readonly isSubmitting = signal(false);
   protected readonly errorMessage = signal('');
   protected readonly infoMessage = signal('');
+  protected readonly registerQueryParams = signal<{ returnUrl?: string }>({});
+  protected readonly verifyQueryParams = signal<{ returnUrl?: string }>({});
 
   protected readonly loginForm = this.fb.nonNullable.group({
     identifier: ['', [Validators.required]],
@@ -27,6 +32,15 @@ export class LoginComponent {
 
   constructor() {
     const registered = this.route.snapshot.queryParamMap.get('registered');
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+    if (returnUrl) {
+      this.infoMessage.set('Please sign in or create an account to continue checkout.');
+      this.registerQueryParams.set({ returnUrl });
+      this.verifyQueryParams.set({ returnUrl });
+      return;
+    }
+
     if (registered === 'true') {
       this.infoMessage.set('Account created. Verify your email with OTP before signing in.');
     }
@@ -41,22 +55,25 @@ export class LoginComponent {
     this.errorMessage.set('');
     this.isSubmitting.set(true);
 
-    this.authService.login(this.loginForm.getRawValue()).subscribe({
-      next: () => {
-        this.isSubmitting.set(false);
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.authService
+      .login(this.loginForm.getRawValue())
+      .pipe(switchMap(() => this.cartService.mergeGuestCartAfterLogin()))
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-        if (returnUrl) {
-          this.router.navigateByUrl(returnUrl);
-          return;
-        }
+          if (returnUrl) {
+            this.router.navigateByUrl(returnUrl);
+            return;
+          }
 
-        this.router.navigate(['/']);
-      },
-      error: (error: { error?: { message?: string } }) => {
-        this.isSubmitting.set(false);
-        this.errorMessage.set(error.error?.message ?? 'Failed to login.');
-      },
-    });
+          this.router.navigate(['/']);
+        },
+        error: (error: { error?: { message?: string } }) => {
+          this.isSubmitting.set(false);
+          this.errorMessage.set(error.error?.message ?? 'Failed to login.');
+        },
+      });
   }
 }
