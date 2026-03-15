@@ -71,14 +71,19 @@ export class ProductDetailComponent implements OnInit {
       return galleryFromImages;
     }
 
-    return current.imageUrl
+    return current.imageUrl?.trim()
       ? [
           {
-            url: current.imageUrl,
+            url: current.imageUrl.trim(),
             alt: current.name,
           },
         ]
-      : [];
+      : [
+          {
+            url: '/product-placeholder.svg',
+            alt: `${current.name} placeholder image`,
+          },
+        ];
   });
 
   protected readonly currentImage = computed(() => {

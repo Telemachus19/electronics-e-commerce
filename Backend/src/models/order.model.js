@@ -9,6 +9,7 @@ const orderItemSchema = new mongoose.Schema(
     },
     name: String, // Snapshot of product name
     price: Number, // Snapshot of price at time of purchase
+    imageUrl: String, // Snapshot of product image at time of purchase
     quantity: {
       type: Number,
       required: true,

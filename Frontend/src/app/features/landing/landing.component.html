@@ -6,6 +6,12 @@
       <p class="pill">{{ heroTag(heroProduct) }}</p>
       <h1 id="hero-title">{{ heroProduct.name }}</h1>
       <p>{{ heroDescription(heroProduct) }}</p>
+      <div class="hero-price-row">
+        @if (heroProduct.compareAtPrice && heroProduct.compareAtPrice > heroProduct.price) {
+        <p class="hero-price-old">${{ heroProduct.compareAtPrice | number: '1.2-2' }}</p>
+        }
+        <p class="hero-price-current">${{ heroProduct.price | number: '1.2-2' }}</p>
+      </div>
       <div class="hero-actions">
         <a class="btn btn-primary" [routerLink]="['/products', productRouteId(heroProduct)]">Shop Now</a>
         <a class="btn btn-ghost" routerLink="/products">Learn More</a>
@@ -132,7 +138,12 @@
           </p>
           <h3>{{ product.name }}</h3>
           <div class="product-bottom">
-            <p class="price">${{ product.price }}</p>
+            <div class="price-stack">
+              @if (product.compareAtPrice && product.compareAtPrice > product.price) {
+              <p class="price-old">${{ product.compareAtPrice | number: '1.2-2' }}</p>
+              }
+              <p class="price">${{ product.price | number: '1.2-2' }}</p>
+            </div>
             <a class="btn btn-primary" [routerLink]="['/products', productRouteId(product)]">View</a>
           </div>
         </div>

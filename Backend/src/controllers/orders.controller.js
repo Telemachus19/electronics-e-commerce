@@ -35,6 +35,7 @@ const createOrder = async (req, res) => {
         product: product._id,
         name: product.name,
         price: product.price,
+        imageUrl: product.imageUrl || null,
         quantity: item.quantity,
       });
     }
@@ -79,8 +80,9 @@ const createOrder = async (req, res) => {
       items: orderItems,
       totalPrice,
       shippingAddress,
+      status: method === "cod" ? "processing" : "pending",
       paymentMethod: method,
-      paymentStatus: method === "card" ? "pending" : "pending", // COD is also pending until delivered/paid
+      paymentStatus: "pending",
       stripeSessionId,
     });
 

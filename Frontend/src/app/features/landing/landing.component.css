@@ -61,6 +61,27 @@ body {
   font-size: 1.05rem;
 }
 
+.hero-price-row {
+  margin-top: 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.hero-price-old {
+  margin: 0;
+  color: #90a0b8;
+  text-decoration: line-through;
+  font-size: 1.1rem;
+}
+
+.hero-price-current {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 700;
+}
+
 .hero-actions {
   margin-top: 1.8rem;
   display: flex;
@@ -317,6 +338,20 @@ body {
   font-size: 1.55rem;
   font-weight: 700;
   color: #111319;
+}
+
+.price-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.14rem;
+}
+
+.price-old {
+  margin: 0;
+  color: #7f8794;
+  font-size: 0.82rem;
+  line-height: 1.1;
+  text-decoration: line-through;
 }
 
 .product-bottom {
