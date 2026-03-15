@@ -164,6 +164,7 @@ export class VerifyOtpComponent {
         next: () => {
           this.isSubmitting.set(false);
           this.isVerified.set(true);
+          this.otpForm.disable();
           this.successMessage.set('Email verified successfully. Redirecting...');
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
           timer(1800)
