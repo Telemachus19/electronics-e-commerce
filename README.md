@@ -1,18 +1,18 @@
-# Electronics E-Commerce (MEAN Stack)
+# 🛍️ Electronics E-Commerce (MEAN Stack)
 
 A full-stack electronics e-commerce application built with MongoDB, Express, Angular, and Node.js.
 
-## Tech Stack
+## 🧰 Tech Stack
 
-| Layer    | Technology                      |
-| -------- | ------------------------------- |
-| Frontend | Angular 21, TypeScript          |
-| Backend  | Node.js, Express.js             |
-| Database | MongoDB (Mongoose)              |
-| Auth     | JWT, bcryptjs, Nodemailer (OTP) |
-| Payments | Stripe                          |
+| Layer       | Technology                      |
+| ----------- | ------------------------------- |
+| 🖥️ Frontend | Angular 21, TypeScript          |
+| ⚙️ Backend  | Node.js, Express.js             |
+| 🗄️ Database | MongoDB (Mongoose)              |
+| 🔐 Auth     | JWT, bcryptjs, Nodemailer (OTP) |
+| 💳 Payments | Stripe                          |
 
-## Project Structure
+## 🗂️ Project Structure
 
 ```
 electronics-e-commerce/
@@ -20,7 +20,7 @@ electronics-e-commerce/
 └── Frontend/  # Angular SPA
 ```
 
-## Setup
+## ⚙️ Setup
 
 Install all dependencies from the repo root:
 
@@ -32,7 +32,7 @@ npm --prefix Frontend install
 
 Copy `Backend/.env.example` to `Backend/.env` and fill in your values (`MONGO_URI`, `JWT_SECRET`, `STRIPE_SECRET_KEY`, etc.).
 
-## Running
+## ▶️ Running
 
 **Both apps (recommended):**
 
@@ -50,28 +50,28 @@ cd Backend && npm start
 cd Frontend && npm start
 ```
 
-| Service  | URL                   |
-| -------- | --------------------- |
-| Frontend | http://localhost:4200 |
-| Backend  | http://localhost:5000 |
+| Service     | URL                   |
+| ----------- | --------------------- |
+| 🌐 Frontend | http://localhost:4200 |
+| 🔗 Backend  | http://localhost:5000 |
 
-## Build
+## 🏗️ Build
 
 ```bash
 cd Frontend && npm run build
 ```
 
-## Features
+## ✨ Features
 
-- JWT authentication with email/phone login, OTP verification, and token blacklisting
-- Role-based access control (`admin`, `seller`, `customer`, `support`)
-- Admin user lifecycle management (approve, restrict, soft delete, change role)
-- Product catalog with search, filters, and pagination
-- Persistent cart with guest-to-authenticated merge
-- Order management with Stripe payments
-- Product reviews (one per user) with computed rating aggregates
-- Client-side wishlist persisted in LocalStorage
+- 🔐 JWT authentication with email/phone login, OTP verification, and token blacklisting
+- 👥 Role-based access control (`admin`, `seller`, `customer`, `support`)
+- 🛠️ Admin user lifecycle management (approve, restrict, soft delete, change role)
+- 🔍 Product catalog with search, filters, and pagination
+- 🛒 Persistent cart with guest-to-authenticated merge
+- 📦 Order management with Stripe payments
+- ⭐ Product reviews (one per user) with computed rating aggregates
+- ❤️ Client-side wishlist persisted in LocalStorage
 
-## API
+## 📬 API
 
 Postman collection: `E-Commerce.postman_collection.json`
