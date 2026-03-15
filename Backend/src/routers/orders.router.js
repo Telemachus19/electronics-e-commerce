@@ -1,7 +1,6 @@
 const express = require("express");
 const {
   createOrder,
-  createGuestOrder,
   listOrders,
   getOrderById,
   updateOrder,
@@ -11,9 +10,6 @@ const {
 const { authenticate } = require("../middlewares/auth.middleware");
 
 const ordersRouter = express.Router();
-
-// Guest checkout (no auth required)
-ordersRouter.post("/guest", createGuestOrder);
 
 ordersRouter.use(authenticate);
 

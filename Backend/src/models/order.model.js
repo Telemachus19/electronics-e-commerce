@@ -23,16 +23,7 @@ const orderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      default: null,
-    },
-    guestName: {
-      type: String,
-      trim: true,
-    },
-    guestEmail: {
-      type: String,
-      trim: true,
-      lowercase: true,
+      required: true,
     },
     items: [orderItemSchema],
     totalPrice: {
