@@ -117,14 +117,12 @@ export class CheckoutComponent implements OnInit {
           return;
         }
 
-        this.placedOrderId.set(response.data._id);
-        this.orderSuccess.set(true);
         this.isPlacingOrder.set(false);
-
         if (this.isGuest()) {
           this.cartService.clearGuestCart();
         }
         this.cartService.clearCount();
+        void this.router.navigate(['/orders', response.data._id]);
       },
       error: (err: { error?: { message?: string } }) => {
         this.error.set(err?.error?.message || 'Failed to place order. Please try again.');

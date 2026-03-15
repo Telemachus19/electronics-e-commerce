@@ -2,14 +2,8 @@
   <div class="nav-container">
     <a class="brand" routerLink="/" (click)="closeMenu()">TechMart</a>
 
-    <button
-      type="button"
-      class="hamburger"
-      [class.is-open]="menuOpen()"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuOpen()"
-      aria-label="Toggle navigation menu"
-    >
+    <button type="button" class="hamburger" [class.is-open]="menuOpen()" (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()" aria-label="Toggle navigation menu">
       <span></span>
       <span></span>
       <span></span>
@@ -18,12 +12,7 @@
     <div class="nav-panel" [class.is-open]="menuOpen()">
       <ul class="nav-links" aria-label="Primary">
         <li>
-          <a
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="closeMenu()"
-          >
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
             Home
           </a>
         </li>
@@ -33,12 +22,17 @@
         <li>
           <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Products</a>
         </li>
+        @if (isAuthenticated()) {
+        <li>
+          <a routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
+        </li>
+        }
         @if (isAuthenticated() && (role() === 'admin' || role() === 'seller')) {
-          <li>
-            <a routerLink="/panel" routerLinkActive="active" (click)="closeMenu()">
-              {{ role() === 'admin' ? 'Admin Panel' : 'Seller Panel' }}
-            </a>
-          </li>
+        <li>
+          <a routerLink="/panel" routerLinkActive="active" (click)="closeMenu()">
+            {{ role() === 'admin' ? 'Admin Panel' : 'Seller Panel' }}
+          </a>
+        </li>
         }
       </ul>
 
@@ -46,111 +40,52 @@
         <span class="search-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" role="presentation" focusable="false">
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-            <path
-              d="M20 20l-3.5-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
+            <path d="M20 20l-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </span>
-        <input
-          id="search-input"
-          type="search"
-          placeholder="Search products..."
-          [value]="searchTerm()"
-          (input)="onSearchInput($event)"
-          (keydown.enter)="onSearchSubmit()"
-        />
+        <input id="search-input" type="search" placeholder="Search products..." [value]="searchTerm()"
+          (input)="onSearchInput($event)" (keydown.enter)="onSearchSubmit()" />
       </label>
 
       <div class="nav-actions" aria-label="Quick actions">
-        <a
-          routerLink="/cart"
-          routerLinkActive="active-action"
-          aria-label="Cart"
-          class="with-badge"
-          (click)="closeMenu()"
-        >
+        <a routerLink="/cart" routerLinkActive="active-action" aria-label="Cart" class="with-badge"
+          (click)="closeMenu()">
           <svg viewBox="0 0 24 24" role="presentation" focusable="false">
             <circle cx="9" cy="20" r="1.5" fill="currentColor" />
             <circle cx="17" cy="20" r="1.5" fill="currentColor" />
-            <path
-              d="M3 4h2l2.4 10h10.4l2-7H7.1"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path d="M3 4h2l2.4 10h10.4l2-7H7.1" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <span class="badge-count" aria-label="Cart items">{{ cartItemCount() }}</span>
         </a>
-        <a
-          routerLink="/wishlist"
-          routerLinkActive="active-action"
-          aria-label="Wishlist"
-          class="with-badge"
-          (click)="closeMenu()"
-        >
+        <a routerLink="/wishlist" routerLinkActive="active-action" aria-label="Wishlist" class="with-badge"
+          (click)="closeMenu()">
           <svg viewBox="0 0 24 24" role="presentation" focusable="false">
             <path
               d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+              fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <span class="badge-count" aria-label="Wishlist items">{{ wishlistCount() }}</span>
         </a>
         @if (!isAuthenticated()) {
-          <a
-            class="auth-link"
-            routerLink="/login"
-            routerLinkActive="active-auth-link"
-            (click)="closeMenu()"
-            >Login</a
-          >
-          <a
-            class="auth-link register"
-            routerLink="/register"
-            routerLinkActive="active-auth-link"
-            (click)="closeMenu()"
-          >
-            Sign Up
-          </a>
+        <a class="auth-link" routerLink="/login" routerLinkActive="active-auth-link" (click)="closeMenu()">Login</a>
+        <a class="auth-link register" routerLink="/register" routerLinkActive="active-auth-link" (click)="closeMenu()">
+          Sign Up
+        </a>
         } @else {
-          <a
-            routerLink="/profile"
-            routerLinkActive="active-action"
-            aria-label="Profile"
-            class="nav-icon-link"
-            (click)="closeMenu()"
-          >
-            <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-              <path
-                d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M3.5 20.5a8.5 8.5 0 0 1 17 0"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"
-              />
-            </svg>
-          </a>
-          <span class="role-chip">{{ role() }}</span>
-          <button type="button" aria-label="Logout" class="logout-btn" (click)="logout()">
-            Logout
-          </button>
+        <a routerLink="/profile" routerLinkActive="active-action" aria-label="Profile" class="nav-icon-link"
+          (click)="closeMenu()">
+          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+            <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="1.7"
+              stroke-linejoin="round" />
+            <path d="M3.5 20.5a8.5 8.5 0 0 1 17 0" fill="none" stroke="currentColor" stroke-width="1.7"
+              stroke-linecap="round" />
+          </svg>
+        </a>
+        <span class="role-chip">{{ role() }}</span>
+        <button type="button" aria-label="Logout" class="logout-btn" (click)="logout()">
+          Logout
+        </button>
         }
       </div>
     </div>

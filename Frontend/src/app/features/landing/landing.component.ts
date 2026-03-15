@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductsService, Product, ProductCategory } from '../products/products/products.service';
 
@@ -18,7 +19,7 @@ type CategoryCard = {
 
 @Component({
   selector: 'app-landing',
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -135,13 +136,9 @@ export class LandingComponent implements OnInit {
   protected productImage(product: Product): string {
     const primaryGalleryImage = product.images?.find((image) => image.isPrimary)?.url;
     const firstGalleryImage = product.images?.[0]?.url;
+    const imageUrl = product.imageUrl?.trim();
 
-    return (
-      primaryGalleryImage ||
-      firstGalleryImage ||
-      product.imageUrl ||
-      'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=640&auto=format&fit=crop'
-    );
+    return primaryGalleryImage || firstGalleryImage || imageUrl || '/product-placeholder.svg';
   }
 
   private loadCategories(): void {

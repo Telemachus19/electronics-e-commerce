@@ -5,6 +5,7 @@ export interface OrderItem {
   product: string;
   name: string;
   price: number;
+  imageUrl?: string;
   quantity: number;
 }
 
@@ -43,6 +44,13 @@ export class OrdersService {
     return this.http.post<{ data: Order; stripeUrl?: string }>(
       `${this.ordersApiUrl}/guest`,
       payload,
+    );
+  }
+
+  verifyStripePayment(sessionId: string) {
+    return this.http.post<{ message: string; data: Order | null }>(
+      `${this.ordersApiUrl}/verify-payment`,
+      { sessionId },
     );
   }
 

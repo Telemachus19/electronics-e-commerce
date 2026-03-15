@@ -5,7 +5,7 @@ const getCart = async (req, res) => {
   try {
     let cart = await Cart.findOne({ user: req.user._id }).populate(
       "items.product",
-      "name price imageUrl"
+      "name price imageUrl",
     );
 
     if (!cart) {
@@ -44,7 +44,7 @@ const addToCart = async (req, res) => {
     } else {
       // Update existing cart
       const itemIndex = cart.items.findIndex(
-        (item) => item.product.toString() === productId
+        (item) => item.product.toString() === productId,
       );
 
       if (itemIndex > -1) {
@@ -57,7 +57,7 @@ const addToCart = async (req, res) => {
 
     const populatedCart = await Cart.findById(cart._id).populate(
       "items.product",
-      "name price imageUrl"
+      "name price imageUrl",
     );
 
     return res.status(200).json({ data: populatedCart });
@@ -77,13 +77,13 @@ const removeFromCart = async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== productId
+      (item) => item.product.toString() !== productId,
     );
     await cart.save();
 
     const populatedCart = await Cart.findById(cart._id).populate(
       "items.product",
-      "name price imageUrl"
+      "name price imageUrl",
     );
 
     return res.status(200).json({ data: populatedCart });
@@ -118,7 +118,7 @@ const mergeCart = async (req, res) => {
       // If user already has a DB cart, merge items
       for (const guestItem of items) {
         const existingItem = cart.items.find(
-          (dbItem) => dbItem.product.toString() === guestItem.productId
+          (dbItem) => dbItem.product.toString() === guestItem.productId,
         );
 
         if (existingItem) {

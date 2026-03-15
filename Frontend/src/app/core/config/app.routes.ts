@@ -10,6 +10,8 @@ import { ProductDetailComponent } from '../../features/products/product-detail/p
 import { WishlistComponent } from '../../features/products/wishlist/wishlist.component';
 import { CartComponent } from '../../features/products/cart/cart.component';
 import { CheckoutComponent } from '../../features/products/checkout.component';
+import { OrdersListComponent } from '../../features/products/orders/orders-list.component';
+import { OrderDetailComponent } from '../../features/products/orders/order-detail.component';
 import { LoginComponent } from '../../features/auth/login/login.component';
 import { RegisterComponent } from '../../features/auth/register/register.component';
 import { VerifyUserComponent } from '../../features/auth/verification/verify-email/verify-user.component';
@@ -48,7 +50,17 @@ export const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailComponent },
   { path: 'wishlist', component: WishlistComponent },
-  { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+  { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
+  {
+    path: 'checkout/success',
+    loadComponent: () =>
+      import('../../features/products/checkout-success.component').then(
+        (m) => m.CheckoutSuccessComponent,
+      ),
+    canActivate: [authGuard],
+  },
+  { path: 'orders', component: OrdersListComponent, canActivate: [authGuard] },
+  { path: 'orders/:id', component: OrderDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },
 ];

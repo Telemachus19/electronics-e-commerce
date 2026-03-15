@@ -29,7 +29,6 @@ const normalizePhoneNumber = (value) => {
   if (egyptMobileWithoutPrefix) {
     return `+20${egyptMobileWithoutPrefix[1]}`;
   }
-
   return sanitizedPhone;
 };
 

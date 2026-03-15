@@ -110,6 +110,35 @@ export class CartService {
     }
   }
 
+  mergeGuestCartAfterLogin(): Observable<{ data: Cart | { items: CartItem[] } }> {
+    if (!this.authService.isAuthenticated()) {
+      const items = this.getGuestCartItems();
+      this._updateCount(items);
+      return of({ data: { items } });
+    }
+
+    const guestEntries = this.getGuestCartEntries();
+    if (guestEntries.length === 0) {
+      return this.getCart();
+    }
+
+    const payload = {
+      items: guestEntries.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      })),
+    };
+
+    return this.http.post<{ data: Cart }>(`${this.cartApiUrl}/merge`, payload).pipe(
+      tap({
+        next: (r) => {
+          this.clearGuestCart();
+          this._updateCount(r.data.items || []);
+        },
+      }),
+    );
+  }
+
   private getGuestCartItems(): CartItem[] {
     return this.getGuestCartEntries().map((e) => ({
       product: { _id: e.productId, name: e.name, price: e.price, imageUrl: e.imageUrl },

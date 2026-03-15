@@ -23,6 +23,8 @@ import { AuthService } from '../../../core/auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductManagementComponent implements OnInit {
+  private readonly fallbackProductImage = '/product-placeholder.svg';
+
   private readonly productsService = inject(ProductsService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
@@ -148,10 +150,17 @@ export class ProductManagementComponent implements OnInit {
   }
 
   protected productImage(product: Product): string {
-    return (
-      product.imageUrl ||
-      'https://images.unsplash.com/photo-1468495244123-6c6f5f5b7f1d?w=640&q=80&auto=format&fit=crop'
-    );
+    const imageUrl = product.imageUrl?.trim();
+    return imageUrl || this.fallbackProductImage;
+  }
+
+  protected onProductImageError(event: Event): void {
+    const image = event.target as HTMLImageElement | null;
+    if (!image || image.src.endsWith(this.fallbackProductImage)) {
+      return;
+    }
+
+    image.src = this.fallbackProductImage;
   }
 
   protected formatCategory(category: string | null | undefined): string {

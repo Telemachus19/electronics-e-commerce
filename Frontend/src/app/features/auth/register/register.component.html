@@ -13,33 +13,25 @@
       <label class="field-label" for="email">Email</label>
       <input id="email" class="field-input" type="email" formControlName="email" />
 
-      <label class="field-label" for="phone"
-        >Phone <span class="optional-label">(Optional)</span></label
-      >
-      <input
-        id="phone"
-        class="field-input"
-        type="tel"
-        formControlName="phone"
-        autocomplete="tel"
-        placeholder="+20116639190"
-      />
+      <label class="field-label" for="phone">Phone <span class="optional-label">(Optional)</span></label>
+      <input id="phone" class="field-input" type="tel" formControlName="phone" autocomplete="tel"
+        placeholder="+201166391900" />
 
       @if (registerForm.controls.phone.touched && registerForm.controls.phone.invalid) {
-        <p class="error-message" role="alert">
-          Use a valid number like 01166391900 or +201166391900.
-        </p>
+      <p class="error-message" role="alert">
+        Use a valid number like 01166391900 or +201166391900.
+      </p>
       }
 
       <label class="field-label" for="password">Password</label>
       <input id="password" class="field-input" type="password" formControlName="password" />
 
       @if (errorMessage()) {
-        <p class="error-message" role="alert">{{ errorMessage() }}</p>
+      <p class="error-message" role="alert">{{ errorMessage() }}</p>
       }
 
       @if (successMessage()) {
-        <p class="success-message">{{ successMessage() }}</p>
+      <p class="success-message">{{ successMessage() }}</p>
       }
 
       <button class="submit-button" type="submit" [disabled]="isSubmitting()">

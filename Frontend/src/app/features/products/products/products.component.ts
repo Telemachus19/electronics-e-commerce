@@ -211,10 +211,8 @@ export class ProductsComponent implements OnInit {
   }
 
   protected productImage(product: Product): string {
-    return (
-      product.imageUrl ||
-      'https://images.unsplash.com/photo-1468495244123-6c6f5f5b7f1d?w=640&q=80&auto=format&fit=crop'
-    );
+    const imageUrl = product.imageUrl?.trim();
+    return imageUrl || '/product-placeholder.svg';
   }
 
   protected isSavedForLater(productId: string): boolean {

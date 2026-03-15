@@ -25,9 +25,6 @@ export class WishlistComponent {
   }
 
   protected productImage(url?: string): string {
-    return (
-      url ||
-      'https://images.unsplash.com/photo-1468495244123-6c6f5f5b7f1d?w=640&q=80&auto=format&fit=crop'
-    );
+    return url?.trim() || '/product-placeholder.svg';
   }
 }

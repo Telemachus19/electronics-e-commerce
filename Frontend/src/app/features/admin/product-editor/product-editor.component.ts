@@ -125,19 +125,40 @@ export class ProductEditorComponent implements OnInit {
   private buildPayload(): ProductUpsertPayload {
     const raw = this.form.getRawValue();
 
-    const compareAtPrice = raw.compareAtPrice.trim() ? Number(raw.compareAtPrice) : null;
+    const compareAtPriceText = this.asTrimmedText(raw.compareAtPrice);
+    const compareAtPrice = compareAtPriceText ? Number(compareAtPriceText) : null;
+
+    const name = this.asTrimmedText(raw.name);
+    const description = this.asTrimmedText(raw.description);
+    const category = this.asTrimmedText(raw.category);
+    const brand = this.asTrimmedText(raw.brand);
+    const slug = this.asTrimmedText(raw.slug);
+    const sku = this.asTrimmedText(raw.sku);
+    const imageUrl = this.asTrimmedText(raw.imageUrl);
 
     return {
-      name: raw.name.trim(),
-      description: raw.description.trim() || undefined,
+      name,
+      description: description || undefined,
       price: Number(raw.price),
       compareAtPrice,
       stock: Number(raw.stock),
-      category: raw.category.trim().toLowerCase() || undefined,
-      brand: raw.brand.trim() || undefined,
-      slug: raw.slug.trim().toLowerCase() || undefined,
-      sku: raw.sku.trim().toUpperCase() || undefined,
-      imageUrl: raw.imageUrl.trim() || undefined,
+      category: category.toLowerCase() || undefined,
+      brand: brand || undefined,
+      slug: slug.toLowerCase() || undefined,
+      sku: sku.toUpperCase() || undefined,
+      imageUrl: imageUrl || undefined,
     };
+  }
+
+  private asTrimmedText(value: unknown): string {
+    if (typeof value === 'string') {
+      return value.trim();
+    }
+
+    if (value == null) {
+      return '';
+    }
+
+    return String(value).trim();
   }
 }
