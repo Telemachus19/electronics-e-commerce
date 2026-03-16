@@ -50,6 +50,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.83rem;
+  white-space: nowrap;
   padding: 0.3rem 0.6rem;
   border-radius: 999px;
   border: 1px solid transparent;
@@ -73,7 +74,7 @@
 
 .search-wrap {
   margin-left: auto;
-  flex: 1 1 220px;
+  flex: 0 1 auto;
   width: clamp(180px, 28vw, 370px);
   min-width: 0;
   height: 36px;
@@ -262,7 +263,7 @@
   .search-wrap {
     margin-left: 0;
     width: clamp(140px, 24vw, 300px);
-    flex: 1 1 180px;
+    flex: 0 1 auto;
     min-width: 0;
   }
 
